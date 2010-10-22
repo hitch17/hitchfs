@@ -7,27 +7,24 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
 
-import fakefs.FakeFileOperations;
-import fakefs.FileSystem;
-import fakefs.MockFileSystem;
-
 public class StubFileSystemTest {
 
 	@Test
 	public void testFakeTheReal() {
 		Mockery mock = new Mockery();
 		final FakeFileOperations ops = mock.mock(FakeFileOperations.class);
+		
+		MockFileSystem fs = new MockFileSystem(ops);
+		File real = new File("fakedir/fakefile.txt");
+		final FakeFile fake = fs.file(real);
+
 		mock.checking(new Expectations() {{
-			one(ops).length(null);
-			will(returnValue(5));
+			one(ops).length(fake); will(returnValue(5));
 		}});
 		
-		FileSystem fs = new MockFileSystem(ops);
-		File real = new File("fakedir/fakefile.txt");
-		File fake = fs.file(real);
-		
-		assertEquals(real.length(), fake.length());
+		assertEquals(real.length(), fake.getAbsolutePath());
 		mock.assertIsSatisfied();
+		
 	}
 	
 }

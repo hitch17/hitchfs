@@ -10,63 +10,32 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
 public class StubFileSystem implements FakeFileOperations, FileSystem {
 	
-	private static Field pathField;
-	private static Field prefixLengthField;
-
-	static {
-		try {
-			pathField = File.class.getDeclaredField("path");
-			pathField.setAccessible(true);
-			prefixLengthField = File.class.getDeclaredField("prefixLength");
-			prefixLengthField.setAccessible(true);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchFieldException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	public FakeFile file(File parent, String child) {
 		return new FakeFile(this, parent, child);
 	}
-
 	
 	public FakeFile file(String parent, String child) {
 		return new FakeFile(this, parent, child);
 	}
-
 	
 	public FakeFile file(String pathname) {
 		return new FakeFile(this, pathname);
 	}
 	
-	
 	public FakeFile file(URI uri) {
 		return new FakeFile(this, uri);
 	}
 
-	// This allows you to create a file for testing from a real file.
-	
 	public FakeFile file(File regular) {
-		FakeFile f = this.file(regular.getAbsolutePath());
-		try {
-			pathField.set(f, pathField.get(regular));
-			prefixLengthField.set(f, prefixLengthField.get(regular));
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		return f;
-	}
-
+		return new FakeFile(this, regular);
+	}	
+	
 	public boolean canExecute(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}

@@ -18,110 +18,90 @@ public class MockFileSystem implements FileSystem {
 		this.mockFS = mockFS;
 	}
 
-	public File file(File parent, String child) {
+	public FakeFile file(File parent, String child) {
 		return new FakeFile(mockFS, parent, child);
 	}
 
-	public File file(String parent, String child) {
-		// TODO Auto-generated method stub
-		return null;
+	public FakeFile file(String parent, String child) {
+		return new FakeFile(mockFS, parent, child);
 	}
 
-	public File file(String pathname) {
-		// TODO Auto-generated method stub
-		return null;
+	public FakeFile file(String pathname) {
+		return new FakeFile(mockFS, pathname);
 	}
 
-	public File file(URI uri) {
-		// TODO Auto-generated method stub
-		return null;
+	public FakeFile file(URI uri) {
+		return new FakeFile(mockFS, uri);
 	}
 
-	public File file(File file) {
-		// TODO Auto-generated method stub
-		return null;
+	public FakeFile file(File file) {
+		return new FakeFile(mockFS, file);
 	}
 
 	public InputStream input(File file) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public InputStream input(String file) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public InputStream input(FileDescriptor fdObj) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public OutputStream output(File file) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public OutputStream output(FileDescriptor fdObj) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public OutputStream output(String name) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public OutputStream output(File file, boolean append)
 			throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public OutputStream output(String name, boolean append)
 			throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Reader reader(File file) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Reader reader(String name) throws FileNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Reader reader(FileDescriptor fdObj) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Writer writer(File file) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Writer writer(FileDescriptor fdObj) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Writer writer(String name) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Writer writer(File file, boolean append) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	public Writer writer(String name, boolean append) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 }

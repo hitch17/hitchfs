@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -10,26 +11,55 @@ import java.net.URL;
 public class FakeFile extends File {
 
 	private static final long serialVersionUID = 6833759609396625529L;
-	private FakeFileOperations fs;
+
+	private static final Field pathField;
+	private static final Field prefixLengthField;
+
+	static {
+		try {
+			pathField = File.class.getDeclaredField("path");
+			pathField.setAccessible(true);
+			prefixLengthField = File.class.getDeclaredField("prefixLength");
+			prefixLengthField.setAccessible(true);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
-	protected FakeFile(FakeFileOperations fs, File parent, String child) {
+	final FakeFileOperations fs;
+	
+	public FakeFile(FakeFileOperations fs, File parent, String child) {
 		super(parent, child);
 		this.fs = fs;
 	}
 
-	protected FakeFile(FakeFileOperations fs, String parent, String child) {
+	public FakeFile(FakeFileOperations fs, String parent, String child) {
 		super(parent, child);
 		this.fs = fs;
 	}
 
-	protected FakeFile(FakeFileOperations fs, String pathname) {
+	public FakeFile(FakeFileOperations fs, String pathname) {
 		super(pathname);
 		this.fs = fs;
 	}
 
-	protected FakeFile(FakeFileOperations fs, URI uri) {
+	public FakeFile(FakeFileOperations fs, URI uri) {
 		super(uri);
 		this.fs = fs;
+	}
+	
+	public FakeFile(FakeFileOperations fs, File file) {
+		this(fs, file.getAbsolutePath());
+		try {
+			pathField.set(this, pathField.get(file));
+			prefixLengthField.set(this, prefixLengthField.get(file));
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
