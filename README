@@ -1,5 +1,6 @@
 The purpose of FakeFile is to provide an easy way to test file system 
 operations in Java (particularly those in java.io.File) as safely as possible.
+
 The primary benefits are:
 
   - Dangerous file operations, such as delete, are limited to the behavior
@@ -54,6 +55,9 @@ The primary benefits are:
     assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", md5.getDigestAsHex());
     
 
+Then, when you're in your real application, just use DefaultFileSystem to get
+the real Java implementations of File, File Streams, and File Reader/Writers.
+    
 FakeFile is still in early stages, and I have some ideas for where to take it next, but I'd 
 love to hear feedback and other ideasg.  Thanks!  -John
 
