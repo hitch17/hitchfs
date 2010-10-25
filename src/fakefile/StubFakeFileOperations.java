@@ -23,190 +23,190 @@ import java.net.URL;
  */
 public class StubFakeFileOperations implements FakeFileOperations {
 
-	public boolean canExecute(FakeFile MockFile) {
+	public boolean canExecute(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean canRead(FakeFile MockFile) {
+	public boolean canRead(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean canWrite(FakeFile MockFile) {
+	public boolean canWrite(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public int compareTo(FakeFile MockFile, File pathname) {
+	public int compareTo(FakeFile fake, File pathname) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean createNewFile(FakeFile MockFile) throws IOException {
+	public boolean createNewFile(FakeFile fake) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean delete(FakeFile MockFile) {
+	public boolean delete(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void deleteOnExit(FakeFile MockFile) {
+	public void deleteOnExit(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean equals(FakeFile MockFile, Object obj) {
+	public boolean equals(FakeFile fake, Object obj) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean exists(FakeFile MockFile) {
+	public boolean exists(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File geAbsoluteFile(FakeFile MockFile) {
+	public File geAbsoluteFile(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getAbsolutePath(FakeFile MockFile) {
+	public String getAbsolutePath(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File getCanonicalFile(FakeFile MockFile) throws IOException {
+	public File getCanonicalFile(FakeFile fake) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getCanonicalPath(FakeFile MockFile) throws IOException {
+	public String getCanonicalPath(FakeFile fake) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
-	public long getFreeSpace(FakeFile MockFile) {
+	public long getFreeSpace(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getName(FakeFile MockFile) {
+	public String getName(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getParent(FakeFile MockFile) {
+	public String getParent(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File getParentFile(FakeFile MockFile) {
+	public File getParentFile(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getPath(FakeFile MockFile) {
+	public String getPath(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public long getTotalSpace(FakeFile MockFile) {
+	public long getTotalSpace(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public long getUsableSpace(FakeFile MockFile) {
+	public long getUsableSpace(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public int hashCode(FakeFile MockFile) {
+	public int hashCode(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean isAbsolute(FakeFile MockFile) {
+	public boolean isAbsolute(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean isDirectory(FakeFile MockFile) {
+	public boolean isDirectory(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean isFile(FakeFile MockFile) {
+	public boolean isFile(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean isHidden(FakeFile MockFile) {
+	public boolean isHidden(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public long lastModified(FakeFile MockFile) {
+	public long lastModified(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public long length(FakeFile MockFile) {
+	public long length(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String[] list(FakeFile MockFile, FilenameFilter filter) {
+	public String[] list(FakeFile fake, FilenameFilter filter) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String[] list(FakeFile MockFile) {
+	public String[] list(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File[] listFiles(FakeFile MockFile, FileFilter filter) {
+	public File[] listFiles(FakeFile fake, FileFilter filter) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File[] listFiles(FakeFile MockFile, FilenameFilter filter) {
+	public File[] listFiles(FakeFile fake, FilenameFilter filter) {
 		throw new UnsupportedOperationException();
 	}
 
-	public File[] listFiles(FakeFile MockFile) {
+	public File[] listFiles(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean mkdir(FakeFile MockFile) {
+	public boolean mkdir(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean mkdirs(FakeFile MockFile) {
+	public boolean mkdirs(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean renameTo(FakeFile MockFile, File dest) {
+	public boolean renameTo(FakeFile fake, File dest) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setExecutable(FakeFile MockFile, boolean executable,
+	public boolean setExecutable(FakeFile fake, boolean executable,
 			boolean ownerOnly) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setExecutable(FakeFile MockFile, boolean executable) {
+	public boolean setExecutable(FakeFile fake, boolean executable) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setLastModified(FakeFile MockFile, long time) {
+	public boolean setLastModified(FakeFile fake, long time) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setReadOnly(FakeFile MockFile) {
+	public boolean setReadOnly(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setReadable(FakeFile MockFile, boolean readable,
+	public boolean setReadable(FakeFile fake, boolean readable,
 			boolean ownerOnly) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setReadable(FakeFile MockFile, boolean readable) {
+	public boolean setReadable(FakeFile fake, boolean readable) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setWritable(FakeFile MockFile, boolean writable,
+	public boolean setWritable(FakeFile fake, boolean writable,
 			boolean ownerOnly) {
 		throw new UnsupportedOperationException();
 	}
 
-	public boolean setWritable(FakeFile MockFile, boolean writable) {
+	public boolean setWritable(FakeFile fake, boolean writable) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String toString(FakeFile MockFile) {
+	public String toString(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public URI toURI(FakeFile MockFile) {
+	public URI toURI(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 
-	public URL toURL(FakeFile MockFile) throws MalformedURLException {
+	public URL toURL(FakeFile fake) throws MalformedURLException {
 		throw new UnsupportedOperationException();
 	}
 

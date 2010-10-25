@@ -1,0 +1,35 @@
+The purpose of FakeFile is to provide an easy way to test file system 
+operations in Java (particularly those in java.io.File) as safely as possible.
+The primary benefits are:
+
+  - Dangerous file operations, such as delete, are limited to the behavior
+    that you define in your tests.  This helps prevent bugs from performing 
+    accidental damage, and is especially useful when working with someone else's
+    code or library.
+    
+    // Example
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public boolean delete(FakeFile fake) {
+        throw new RuntimeException("deleting me is really bad!");
+      }
+    };
+    FakeFile fake = fs.file("something-critical.txt");
+    fake.delete(); // causes the RuntimeException to be thrown.  
+  
+  - I/O operations are costly, and wasteful in tests. The should be avoided as 
+    much as possible, but at the same time, reading/writing files is likely one 
+    of the most critical operations for your application to do correctly, and requires
+    significant testing.  FakeFile allows you to test while redirecting to in-memory
+    objects such as ByteArrayInputStream or writing to a MessageDigestOutputStream and
+    just verifying an md5 sum in your test:  
+
+    // Example
+    MessageDigestOutputStream out = MessageDigestOutputStream.md5();
+    out.write("fake file with text.".getBytes());
+    out.close();
+    assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", out.getDigestAsHex());
+
+FakeFile is still in early stages, and I have some ideas for where to take it next, but I'd 
+love to hear feedback and other ideas.  Thanks!  -John
+

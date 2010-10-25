@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import fakefile.FakeFile;
@@ -31,13 +33,27 @@ public class StubFileSystemTest {
 	public void testFakeTheReal() {
 		StubFileSystem fs = new StubFileSystem() {
 			@Override
-			public long length(FakeFile fake) {
-				return 20;
+			public boolean exists(FakeFile MockFile) {
+				return true;
 			}
 		};
-		File real = new File("fakedir/fakefile.txt");
-		final FakeFile fake = fs.file(real);
-		assertEquals(real.length(), fake.length());
+		File real = new File("fakedir/doesntexist.txt");
+		FakeFile fake = fs.file(real);
+		Assert.assertFalse(real.exists());
+		Assert.assertTrue(fake.exists());
+	}
+	
+
+	@Test(expected=RuntimeException.class)
+	public void deleteExample() {
+		StubFileSystem fs = new StubFileSystem() {
+			@Override
+			public boolean delete(FakeFile MockFile) {
+				throw new RuntimeException("deleting me is really bad!");
+			}
+		};
+		FakeFile fake = fs.file("something-critical.txt");
+		fake.delete();
 	}
 	
 	@Test

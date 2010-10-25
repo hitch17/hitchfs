@@ -22,104 +22,104 @@ import java.net.URL;
  */
 public interface FakeFileOperations {
 
-	public abstract boolean canExecute(FakeFile MockFile);
+	public abstract boolean canExecute(FakeFile fake);
 
-	public abstract boolean canRead(FakeFile MockFile);
+	public abstract boolean canRead(FakeFile fake);
 
-	public abstract boolean canWrite(FakeFile MockFile);
+	public abstract boolean canWrite(FakeFile fake);
 
-	public abstract boolean createNewFile(FakeFile MockFile) throws IOException;
+	public abstract boolean createNewFile(FakeFile fake) throws IOException;
 
-	public abstract boolean delete(FakeFile MockFile);
+	public abstract boolean delete(FakeFile fake);
 
-	public abstract void deleteOnExit(FakeFile MockFile);
+	public abstract void deleteOnExit(FakeFile fake);
 
-	public abstract boolean exists(FakeFile MockFile);
+	public abstract boolean exists(FakeFile fake);
 
-	public abstract long getFreeSpace(FakeFile MockFile);
+	public abstract long getFreeSpace(FakeFile fake);
 
-	public abstract long getTotalSpace(FakeFile MockFile);
+	public abstract long getTotalSpace(FakeFile fake);
 
-	public abstract long getUsableSpace(FakeFile MockFile);
+	public abstract long getUsableSpace(FakeFile fake);
 
-	public abstract boolean isAbsolute(FakeFile MockFile);
+	public abstract boolean isAbsolute(FakeFile fake);
 
-	public abstract boolean isDirectory(FakeFile MockFile);
+	public abstract boolean isDirectory(FakeFile fake);
 
-	public abstract boolean isFile(FakeFile MockFile);
+	public abstract boolean isFile(FakeFile fake);
 
-	public abstract boolean isHidden(FakeFile MockFile);
+	public abstract boolean isHidden(FakeFile fake);
 
-	public abstract long lastModified(FakeFile MockFile);
+	public abstract long lastModified(FakeFile fake);
 
-	public abstract long length(FakeFile MockFile);
+	public abstract long length(FakeFile fake);
 
-	public abstract String[] list(FakeFile MockFile, FilenameFilter filter);
+	public abstract String[] list(FakeFile fake, FilenameFilter filter);
 
-	public abstract String[] list(FakeFile MockFile);
+	public abstract String[] list(FakeFile fake);
 
-	public abstract File[] listFiles(FakeFile MockFile, FileFilter filter);
+	public abstract File[] listFiles(FakeFile fake, FileFilter filter);
 
-	public abstract File[] listFiles(FakeFile MockFile, FilenameFilter filter);
+	public abstract File[] listFiles(FakeFile fake, FilenameFilter filter);
 
-	public abstract File[] listFiles(FakeFile MockFile);
+	public abstract File[] listFiles(FakeFile fake);
 
-	public abstract boolean mkdir(FakeFile MockFile);
+	public abstract boolean mkdir(FakeFile fake);
 
-	public abstract boolean mkdirs(FakeFile MockFile);
+	public abstract boolean mkdirs(FakeFile fake);
 
-	public abstract boolean renameTo(FakeFile MockFile, File dest);
+	public abstract boolean renameTo(FakeFile fake, File dest);
 
-	public abstract boolean setExecutable(FakeFile MockFile,
+	public abstract boolean setExecutable(FakeFile fake,
 			boolean executable, boolean ownerOnly);
 
-	public abstract boolean setExecutable(FakeFile MockFile, boolean executable);
+	public abstract boolean setExecutable(FakeFile fake, boolean executable);
 
-	public abstract boolean setLastModified(FakeFile MockFile, long time);
+	public abstract boolean setLastModified(FakeFile fake, long time);
 
-	public abstract boolean setReadable(FakeFile MockFile, boolean readable,
+	public abstract boolean setReadable(FakeFile fake, boolean readable,
 			boolean ownerOnly);
 
-	public abstract boolean setReadable(FakeFile MockFile, boolean readable);
+	public abstract boolean setReadable(FakeFile fake, boolean readable);
 
-	public abstract boolean setReadOnly(FakeFile MockFile);
+	public abstract boolean setReadOnly(FakeFile fake);
 
-	public abstract boolean setWritable(FakeFile MockFile, boolean writable,
+	public abstract boolean setWritable(FakeFile fake, boolean writable,
 			boolean ownerOnly);
 
-	public abstract boolean setWritable(FakeFile MockFile, boolean writable);
+	public abstract boolean setWritable(FakeFile fake, boolean writable);
 
-	public abstract URI toURI(FakeFile MockFile);
+	public abstract URI toURI(FakeFile fake);
 
 	/**
 	 * @deprecated because File.toURL() is @deprecated
 	 */
 	@Deprecated
-	public abstract URL toURL(FakeFile MockFile) throws MalformedURLException;
+	public abstract URL toURL(FakeFile fake) throws MalformedURLException;
 
-	public abstract File geAbsoluteFile(FakeFile MockFile);
+	public abstract File geAbsoluteFile(FakeFile fake);
 
-	public abstract String getAbsolutePath(FakeFile MockFile);
+	public abstract String getAbsolutePath(FakeFile fake);
 
-	public abstract File getCanonicalFile(FakeFile MockFile) throws IOException;
+	public abstract File getCanonicalFile(FakeFile fake) throws IOException;
 
-	public abstract String getCanonicalPath(FakeFile MockFile)
+	public abstract String getCanonicalPath(FakeFile fake)
 			throws IOException;
 
-	public abstract File getParentFile(FakeFile MockFile);
+	public abstract File getParentFile(FakeFile fake);
 
-	public abstract String toString(FakeFile MockFile);
+	public abstract String toString(FakeFile fake);
 
-	public abstract boolean equals(FakeFile MockFile, Object obj);
+	public abstract boolean equals(FakeFile fake, Object obj);
 
-	public abstract int hashCode(FakeFile MockFile);
+	public abstract int hashCode(FakeFile fake);
 
-	public abstract int compareTo(FakeFile MockFile, File pathname);
+	public abstract int compareTo(FakeFile fake, File pathname);
 
-	public abstract String getName(FakeFile MockFile);
+	public abstract String getName(FakeFile fake);
 
-	public abstract String getParent(FakeFile MockFile);
+	public abstract String getParent(FakeFile fake);
 
-	public abstract String getPath(FakeFile MockFile);
+	public abstract String getPath(FakeFile fake);
 	
 }
