@@ -1,4 +1,4 @@
-package fakefs;
+package fakefile;
 
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;

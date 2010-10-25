@@ -1,4 +1,4 @@
-package fakefs;
+package fakefile;
 
 import java.io.File;
 import java.io.FileDescriptor;

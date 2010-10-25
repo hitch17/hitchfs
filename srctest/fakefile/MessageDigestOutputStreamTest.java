@@ -1,8 +1,10 @@
-package fakefs;
+package fakefile;
 
 import static junit.framework.Assert.assertEquals;
 
 import org.junit.Test;
+
+import fakefile.MessageDigestOutputStream;
 
 /*
  * Licensed under the Apache License,

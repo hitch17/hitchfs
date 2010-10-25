@@ -1,4 +1,4 @@
-<project name="fakefs" default="jar">
+<project name="fakefile" default="jar">
 
   <target name="init">
     <property name="version" value="0.1"/>
@@ -14,7 +14,7 @@
   </target>
 
   <target name="jar" depends="init,compile">
-    <jar destfile="fakefs-${version}.jar" basedir="classes"/>
+    <jar destfile="fakefile-${version}.jar" basedir="classes"/>
   </target>
 
 </project>

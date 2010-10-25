@@ -1,4 +1,4 @@
-package fakefs;
+package fakefile;
 import static junit.framework.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
@@ -10,6 +10,10 @@ import java.io.Reader;
 import java.io.Writer;
 
 import org.junit.Test;
+
+import fakefile.FakeFile;
+import fakefile.MessageDigestOutputStream;
+import fakefile.StubFileSystem;
 
 /*
  * Licensed under the Apache License,
