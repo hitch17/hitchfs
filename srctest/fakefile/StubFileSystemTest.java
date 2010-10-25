@@ -70,8 +70,7 @@ public class StubFileSystemTest {
 		char[] chars = new char[30];
 		int len = reader.read(chars);
 		reader.close();
-		String result = new String(chars, 0, len);
-		assertEquals(expected, result);
+		assertEquals(expected, new String(chars, 0, len));
 	}
 	
 	@Test

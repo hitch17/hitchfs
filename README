@@ -24,12 +24,36 @@ The primary benefits are:
     objects such as ByteArrayInputStream or writing to a MessageDigestOutputStream and
     just verifying an md5 sum in your test:  
 
-    // Example
-    MessageDigestOutputStream out = MessageDigestOutputStream.md5();
-    out.write("fake file with text.".getBytes());
-    out.close();
-    assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", out.getDigestAsHex());
+    // Reading Example
+    final String expected = "this is some text in memory.";
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public InputStream input(File file) throws FileNotFoundException {
+        return new ByteArrayInputStream(expected.getBytes());
+      }
+    };
+    FakeFile file = fs.file("fakedir/doesntexist.txt");
+    Reader reader = fs.reader(file);
+    char[] chars = new char[30];
+    int len = reader.read(chars);
+    reader.close();
+    assertEquals(expected, new String(chars, 0, len));
+    
+    // Writing Example
+    final MessageDigestOutputStream md5 = MessageDigestOutputStream.md5();
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public OutputStream output(File file) throws FileNotFoundException {
+        return md5;
+      }
+    };
+    FakeFile file = fs.file("fakedir/fakefile2.txt");
+    Writer writer = fs.writer(file);
+    writer.write("fake file with text.");
+    writer.close();
+    assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", md5.getDigestAsHex());
+    
 
 FakeFile is still in early stages, and I have some ideas for where to take it next, but I'd 
-love to hear feedback and other ideas.  Thanks!  -John
+love to hear feedback and other ideasg.  Thanks!  -John
 
