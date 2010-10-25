@@ -8,6 +8,23 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+/*
+ * Licensed under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+/**
+ * A testing version of java.io.File. Each method is overridden to call back to a FakeFileOperations
+ * interface, allowing fine grained control of what files are allowed to do.  The original java.io.File 
+ * methods are still available to be called with the same method name with an underscore prepended.
+ * For example, a call of .exists() on FakeFile will call back to a provided FakeFileOperations implementation,
+ * where ._exists() will call the original File implementation. 
+ */
 public class FakeFile extends File {
 
 	private static final long serialVersionUID = 6833759609396625529L;
@@ -257,7 +274,10 @@ public class FakeFile extends File {
 		return this.fs.toURI(this);
 	}
 
-	@Override
+	/**
+	 * @deprecated because File.toURL() is @deprecated
+	 */
+	@Deprecated @Override
 	public URL toURL() throws MalformedURLException {
 		return this.fs.toURL(this);
 	}
@@ -472,7 +492,10 @@ public class FakeFile extends File {
 		return super.toURI();
 	}
 
-	@SuppressWarnings("deprecation")
+	/**
+	 * @deprecated because File.toURL() is @deprecated
+	 */
+	@Deprecated
 	public URL _toURL() throws MalformedURLException {
 		return super.toURL();
 	}

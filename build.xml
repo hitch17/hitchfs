@@ -1,0 +1,20 @@
+<project name="fakefs" default="jar">
+
+  <target name="init">
+    <property name="version" value="0.1"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="classes"/>
+  </target>
+	
+  <target name="compile" depends="init">
+    <mkdir dir="classes"/>
+    <javac srcdir="src" destdir="classes"/>
+  </target>
+
+  <target name="jar" depends="init,compile">
+    <jar destfile="fakefs-${version}.jar" basedir="classes"/>
+  </target>
+
+</project>
