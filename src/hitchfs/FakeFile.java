@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Licensed under the Apache License,
@@ -52,6 +54,7 @@ public class FakeFile extends File {
 	final FakeFileOperations fs;
 	InputStream input;
 	MessageDigestOutputStream output = md5();
+	Map<Class<? extends FileProp>, FileProp> props = new HashMap<Class<? extends FileProp>, FileProp>();
 
 	public FakeFile(FakeFileOperations fs, File parent, String child) {
 		super(parent, child);
@@ -101,6 +104,16 @@ public class FakeFile extends File {
 	
 	public MessageDigestOutputStream getOutputStream() {
 		return this.output;
+	}
+	
+	public FakeFile withProperty(FileProp property) {
+		this.props.put(property.getClass(), property);
+		return this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends FileProp> T getProperty(Class<T> prop) {
+		return (T) this.props.get(prop);
 	}
 	
 	@Override
@@ -523,5 +536,5 @@ public class FakeFile extends File {
 	public URL _toURL() throws MalformedURLException {
 		return super.toURL();
 	}
-	
+
 }
