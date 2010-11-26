@@ -1,10 +1,13 @@
-package fakefile;
+package hitchfs;
 
 import static junit.framework.Assert.assertEquals;
 
+import hitchfs.MessageDigestOutputStream;
+
+import java.io.ByteArrayOutputStream;
+
 import org.junit.Test;
 
-import fakefile.MessageDigestOutputStream;
 
 /*
  * Licensed under the Apache License,
@@ -66,4 +69,17 @@ public class MessageDigestOutputStreamTest {
 				"cac2cfbf07355336ce86a2c49ba4da26f451552474cfb637dd2bcccae09ef2ea", out.getDigestAsHex());
 	}
 
+	@Test
+	public void testWithOutput() throws Exception {
+		String string = "fake file with text.";
+		MessageDigestOutputStream out = MessageDigestOutputStream.sha512();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(string.length());
+		out.setOutput(baos);
+		out.write(string.getBytes());
+		out.close();
+		assertEquals("f187d7e2b9f0dbd6054357faeccbb4fb82416767f0a45cb682f70f73bda1a974" +
+				"cac2cfbf07355336ce86a2c49ba4da26f451552474cfb637dd2bcccae09ef2ea", out.getDigestAsHex());
+		assertEquals(string, new String(baos.toByteArray()));
+	}
+	
 }

@@ -1,4 +1,4 @@
-package fakefile;
+package hitchfs;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -44,11 +44,20 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 
 	public FakeFile file(File regular) {
-		return new FakeFile(this, regular);
+		if (regular instanceof FakeFile) {
+			return (FakeFile) regular;
+		} else {
+			return new FakeFile(this, regular);
+		}
 	}	
 	
 	public InputStream input(File file) throws FileNotFoundException {
-		throw new UnsupportedOperationException();
+		InputStream input = file(file).getInputStream();
+		if (input == null) {
+			throw new FileNotFoundException();
+		} else {
+			return input;
+		}
 	}
 	
 	public InputStream input(String file) throws FileNotFoundException {
@@ -56,7 +65,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 
 	public OutputStream output(File file) throws FileNotFoundException {
-		throw new UnsupportedOperationException();
+		return file(file).getOutputStream();
 	}
 	
 	public OutputStream output(String filename) throws FileNotFoundException {

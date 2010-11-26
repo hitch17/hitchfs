@@ -1,4 +1,4 @@
-package fakefile;
+package hitchfs;
 
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;
@@ -27,6 +27,7 @@ public class MessageDigestOutputStream extends OutputStream {
 	private final MessageDigest digest;
 	private byte[] bytes;
 	private boolean closed;
+	private OutputStream output;
 
 	public MessageDigestOutputStream(MessageDigest digest) {
 		this.digest = digest;
@@ -35,6 +36,9 @@ public class MessageDigestOutputStream extends OutputStream {
 	@Override
 	public void write(int b) throws IOException {
 		digest.update((byte) (0xFF & b));
+		if (output != null) {
+			output.write(b);
+		}
 	}
 
 	public byte[] getDigest() {
@@ -54,10 +58,17 @@ public class MessageDigestOutputStream extends OutputStream {
 
 	public void close() throws IOException {
 		this.closed = true;
-	};
+		if (output != null) {
+			this.output.close();
+		}
+	}
 	
 	public boolean isClosed() {
 		return closed;
+	}
+	
+	public void setOutput(OutputStream output) {
+		this.output = output;
 	}
 	
 	public boolean isEqual(byte[] expected){
@@ -95,5 +106,5 @@ public class MessageDigestOutputStream extends OutputStream {
 	public static MessageDigestOutputStream sha512() {
 		return output("sha-512");
 	}
-	
+
 }

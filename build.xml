@@ -1,7 +1,7 @@
-<project name="fakefile" default="jar">
+<project name="hitchfs" default="jar">
 
   <target name="init">
-    <property name="version" value="0.1"/>
+    <property name="version" value="0.2"/>
   </target>
 
   <target name="clean">
@@ -14,7 +14,7 @@
   </target>
 
   <target name="jar" depends="init,compile">
-    <jar destfile="fakefile-${version}.jar" basedir="classes"/>
+    <jar destfile="hitchfs-${version}.jar" basedir="classes"/>
   </target>
 
 </project>

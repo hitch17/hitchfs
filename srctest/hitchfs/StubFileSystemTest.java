@@ -1,21 +1,18 @@
-package fakefile;
+package hitchfs;
 import static junit.framework.Assert.assertEquals;
+
+import hitchfs.FakeFile;
+import hitchfs.StubFileSystem;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
-
-import fakefile.FakeFile;
-import fakefile.MessageDigestOutputStream;
-import fakefile.StubFileSystem;
 
 /*
  * Licensed under the Apache License,
@@ -58,14 +55,10 @@ public class StubFileSystemTest {
 	
 	@Test
 	public void testGetReader() throws Exception {
-		final String expected = "this is some text in memory.";
-		StubFileSystem fs = new StubFileSystem() {
-			@Override
-			public InputStream input(File file) throws FileNotFoundException {
-				return new ByteArrayInputStream(expected.getBytes());
-			}
-		};
-		FakeFile file = fs.file("fakedir/doesntexist.txt");
+		String expected = "this is some text in memory.";
+		StubFileSystem fs = new StubFileSystem();
+		FakeFile file = fs.file("fakedir/doesntexist.txt")
+			.withInputStream(new ByteArrayInputStream(expected.getBytes()));
 		Reader reader = fs.reader(file);
 		char[] chars = new char[30];
 		int len = reader.read(chars);
@@ -73,20 +66,21 @@ public class StubFileSystemTest {
 		assertEquals(expected, new String(chars, 0, len));
 	}
 	
+	@Test(expected=FileNotFoundException.class)
+	public void testGetReader_FNF() throws Exception {
+		StubFileSystem fs = new StubFileSystem();
+		FakeFile file = fs.file("fakedir/doesntexist.txt");
+		fs.reader(file);
+	}
+	
 	@Test
 	public void testGetWriter() throws Exception {
-		final MessageDigestOutputStream md5 = MessageDigestOutputStream.md5();
-		StubFileSystem fs = new StubFileSystem() {
-			@Override
-			public OutputStream output(File file) throws FileNotFoundException {
-				return md5;
-			}
-		};
+		StubFileSystem fs = new StubFileSystem();
 		FakeFile file = fs.file("fakedir/fakefile2.txt");
 		Writer writer = fs.writer(file);
 		writer.write("fake file with text.");
 		writer.close();
-		assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", md5.getDigestAsHex());
+		assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", file.getOutputStream().getDigestAsHex());
 	}
 	
 }

@@ -1,4 +1,4 @@
-package fakefile;
+package hitchfs;
 
 import java.io.File;
 import java.io.FileDescriptor;

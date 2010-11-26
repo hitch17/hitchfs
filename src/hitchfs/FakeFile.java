@@ -1,8 +1,12 @@
-package fakefile;
+package hitchfs;
+import static hitchfs.MessageDigestOutputStream.md5;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -46,7 +50,9 @@ public class FakeFile extends File {
 	}
 	
 	final FakeFileOperations fs;
-	
+	InputStream input;
+	MessageDigestOutputStream output = md5();
+
 	public FakeFile(FakeFileOperations fs, File parent, String child) {
 		super(parent, child);
 		this.fs = fs;
@@ -68,7 +74,7 @@ public class FakeFile extends File {
 	}
 	
 	public FakeFile(FakeFileOperations fs, File file) {
-		this(fs, file.getAbsolutePath());
+		this(fs, "");
 		try {
 			pathField.set(this, pathField.get(file));
 			prefixLengthField.set(this, prefixLengthField.get(file));
@@ -79,6 +85,24 @@ public class FakeFile extends File {
 		}
 	}
 
+	public FakeFile withInputStream(InputStream input) {
+		this.input = input;
+		return this;
+	}
+	
+	public FakeFile withOutputStream(OutputStream output) {
+		this.output.setOutput(output);
+		return this;
+	}
+	
+	public InputStream getInputStream() {
+		return this.input;
+	}
+	
+	public MessageDigestOutputStream getOutputStream() {
+		return this.output;
+	}
+	
 	@Override
 	public boolean canExecute() {
 		return this.fs.canExecute(this);
