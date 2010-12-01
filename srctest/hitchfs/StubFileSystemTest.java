@@ -5,6 +5,7 @@ import hitchfs.FakeFile;
 import hitchfs.StubFileSystem;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Reader;
@@ -60,7 +61,7 @@ public class StubFileSystemTest {
 		FakeFile file = fs.file("fakedir/doesntexist.txt")
 			.withInputStream(new ByteArrayInputStream(expected.getBytes()));
 		Reader reader = fs.reader(file);
-		char[] chars = new char[30];
+		char[] chars = new char[expected.length() + 5];
 		int len = reader.read(chars);
 		reader.close();
 		assertEquals(expected, new String(chars, 0, len));
@@ -76,11 +77,14 @@ public class StubFileSystemTest {
 	@Test
 	public void testGetWriter() throws Exception {
 		StubFileSystem fs = new StubFileSystem();
-		FakeFile file = fs.file("fakedir/fakefile2.txt");
+		String message = "fake file with text.";
+		ByteArrayOutputStream out = new ByteArrayOutputStream(message.length());
+		FakeFile file = fs.file("fakedir/fakefile2.txt").withOutputStream(out);
 		Writer writer = fs.writer(file);
-		writer.write("fake file with text.");
+		writer.write(message);
 		writer.close();
 		assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", file.getOutputStream().getDigestAsHex());
+		assertEquals(message, new String(out.toByteArray()));
 	}
 	
 }
