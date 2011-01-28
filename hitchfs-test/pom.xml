@@ -49,6 +49,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
    		<scope>test</scope>
    	</dependency>
    	<dependency>
+   	  <groupId>junit</groupId>
+   	  <artifactId>junit</artifactId>
+   	  <version>4.4</version>
+   	  <scope>test</scope>
+   	</dependency>
+   	<dependency>
    	  <groupId>hitchfs</groupId>
    	  <artifactId>hitchfs-prod</artifactId>
    	  <version>0.0.1-SNAPSHOT</version>
