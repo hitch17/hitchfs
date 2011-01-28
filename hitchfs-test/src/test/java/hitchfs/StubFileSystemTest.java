@@ -1,8 +1,8 @@
 package hitchfs;
-import static junit.framework.Assert.assertEquals;
 
-import hitchfs.FakeFile;
-import hitchfs.StubFileSystem;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.Writer;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -37,8 +35,8 @@ public class StubFileSystemTest {
 		};
 		File real = new File("fakedir/doesntexist.txt");
 		FakeFile fake = fs.file(real);
-		Assert.assertFalse(real.exists());
-		Assert.assertTrue(fake.exists());
+		assertFalse(real.exists());
+		assertTrue(fake.exists());
 	}
 	
 

@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>hitchfs</groupId>
+    <artifactId>hitchfs</artifactId>
+    <name>HitchFS</name>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>
+        File systems that don't suck for testing
+    </description>
+
+    <scm>
+        <connection>scm:git:git://github.com/hitch17/hitchfs.git</connection>
+        <developerConnection>scm:git:git://github.com/hitch17/hitch.git</developerConnection>
+        <url>http://github.com/hitch17/hitchfs/tree/master</url>
+    </scm>
+
+    <modules>
+        <module>hitchfs-parent</module>
+        <module>hitchfs-prod</module>
+        <module>hitchfs-test</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
