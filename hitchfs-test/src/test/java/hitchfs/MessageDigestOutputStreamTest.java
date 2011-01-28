@@ -1,8 +1,7 @@
 package hitchfs;
 
-import static junit.framework.Assert.assertEquals;
 
-import hitchfs.MessageDigestOutputStream;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 
