@@ -88,6 +88,26 @@ public class FakeFile extends File {
 		}
 	}
 
+	public String getPathField() {
+		try {
+			return (String) pathField.get(this);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public String getPrefixLengthField() {
+		try {
+			return (String) prefixLengthField.get(this);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public FakeFile withInputStream(InputStream input) {
 		this.input = input;
 		return this;

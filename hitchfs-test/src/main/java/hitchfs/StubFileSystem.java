@@ -52,20 +52,16 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}	
 	
 	public InputStream input(File file) throws FileNotFoundException {
-		InputStream input = file(file).getInputStream();
-		if (input == null) {
-			throw new FileNotFoundException();
-		} else {
-			return input;
-		}
-	}
+		throw new UnsupportedOperationException();
+ 	}
 	
 	public InputStream input(String file) throws FileNotFoundException {
 		return this.input(this.file(file));
 	}
 
 	public OutputStream output(File file) throws FileNotFoundException {
-		return file(file).getOutputStream();
+		throw new UnsupportedOperationException();
+//		return file(file).getOutputStream();
 	}
 	
 	public OutputStream output(String filename) throws FileNotFoundException {

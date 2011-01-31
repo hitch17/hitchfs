@@ -41,5 +41,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             </plugin>
         </plugins>
    </build>
+   <dependencies>
+   </dependencies>
 </project>
 
