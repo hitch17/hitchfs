@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -207,6 +209,14 @@ public class StubFakeFileOperations implements FakeFileOperations {
 	}
 
 	public URL toURL(FakeFile fake) throws MalformedURLException {
+		throw new UnsupportedOperationException();
+	}
+	
+	public InputStream getInputStream(FakeFile fake) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	public OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException {
 		throw new UnsupportedOperationException();
 	}
 

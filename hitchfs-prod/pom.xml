@@ -7,12 +7,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>hitchfs</groupId>
         <artifactId>hitchfs-parent</artifactId>
-        <version>0.1</version>
+        <version>0.2</version>
     </parent>
 
     <artifactId>hitchfs-prod</artifactId>
     <name>hitchfs-prod</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>
         HitchFS for production

@@ -6,7 +6,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 
     <groupId>hitchfs</groupId>
     <artifactId>hitchfs-parent</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>pom</packaging>
 
     <name>HitchFS parent pom</name>

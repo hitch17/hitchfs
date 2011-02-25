@@ -1,8 +1,13 @@
 package hitchfs;
 
+import static com.google.common.base.Joiner.on;
+import static com.google.common.collect.Iterables.skip;
+import static com.google.common.collect.Lists.newLinkedList;
+import static java.io.File.separator;
+import static java.util.Arrays.asList;
+
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +16,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
+import java.util.LinkedList;
 
 /*
  * Licensed under the Apache License,
@@ -27,81 +33,127 @@ import java.net.URI;
  */
 public class StubFileSystem extends StubFakeFileOperations implements FileSystem {
 	
+	FakeFileOperations operations = this;
+
+	public StubFileSystem() {}
+	
+	public StubFileSystem(FakeFileOperations operations) {
+		this.operations = operations;
+	}
+	
+	
 	public FakeFile file(File parent, String child) {
-		return new FakeFile(this, parent, child);
+		return register(new FakeFile(getFileOperations(), parent, child));
 	}
 	
 	public FakeFile file(String parent, String child) {
-		return new FakeFile(this, parent, child);
+		return register(new FakeFile(getFileOperations(), parent, child));
 	}
 	
 	public FakeFile file(String pathname) {
-		return new FakeFile(this, pathname);
+		return register(new FakeFile(getFileOperations(), pathname));
 	}
 	
 	public FakeFile file(URI uri) {
-		return new FakeFile(this, uri);
+		return register(new FakeFile(getFileOperations(), uri));
 	}
 
 	public FakeFile file(File regular) {
 		if (regular instanceof FakeFile) {
-			return (FakeFile) regular;
+			return register((FakeFile) regular);
 		} else {
-			return new FakeFile(this, regular);
+			return register(new FakeFile(getFileOperations(), regular));
 		}
 	}
 	
-	public InputStream input(File file) throws FileNotFoundException {
-		InputStream input = file(file).getInputStream();
-		if (input == null) {
-			throw new FileNotFoundException();
-		} else {
-			return input;
+	public FakeFileOperations getFileOperations() {
+		return operations ;
+	}
+	
+	public FakeFile register(FakeFile file) {
+		return file.setAbsoluteKey(repath(file._getPath()));
+	}
+	
+	public String getCurrentDirectory() {
+		return System.getProperty("user.dir");
+	}
+
+	public Iterable<String> getCurrentDirectorySplit() {
+		return skip(asList(getCurrentDirectory().split("/")), 1);
+	}
+	
+	public String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
+		StringBuilder buffer = new StringBuilder();
+		if (absolute) {
+			buffer.append(pathDelim);
 		}
-	}
-
-	public InputStream input(String file) throws FileNotFoundException {
-		return this.input(this.file(file));
-	}
-
-	public OutputStream output(File file) throws FileNotFoundException {
-		return file(file).getOutputStream();
+		on(pathDelim).appendTo(buffer, ps);
+		return buffer.toString();
 	}
 	
-	public OutputStream output(String filename) throws FileNotFoundException {
-		return this.output(this.file(filename));
-	}
-
-	public OutputStream output(File file, boolean append) throws FileNotFoundException {
-		return this.output(file);
-	}
-
-	public OutputStream output(String filename, boolean append) throws FileNotFoundException {
-		return this.output(filename);
+	public String repath(String path) {
+		LinkedList<String> ps = newLinkedList();
+		if (!path.startsWith(separator)) {
+			for (String p : getCurrentDirectorySplit()) {
+				ps.addLast(p);
+			}
+		}
+		for (String p : path.split(separator)) {
+			if ("..".equals(p) && ps.size() > 0) {
+				ps.removeLast();
+			} else if (!".".equals(p) && !"".equals(p)) {
+				ps.addLast(p);
+			}
+		}
+		return makePath(ps, separator, true);
 	}
 	
-	public Reader reader(File file) throws FileNotFoundException {
-		return new InputStreamReader(this.input(file));
+	public InputStream input(File file) throws IOException {
+		return getInputStream(file(file));
+	}
+
+	public InputStream input(String file) throws IOException {
+		return input(file(file));
+	}
+
+	public OutputStream output(File file) throws IOException {
+		return output(file, false);
 	}
 	
-	public Reader reader(String filename) throws FileNotFoundException {
-		return this.reader(this.file(filename));
+	public OutputStream output(String filename) throws IOException {
+		return output(file(filename));
+	}
+
+	public OutputStream output(File file, boolean append) throws IOException {
+		return getOutputStream(file(file), append);
+	}
+
+	public OutputStream output(String filename, boolean append) throws IOException {
+		return output(file(filename), append);
+	}
+	
+	public Reader reader(File file) throws IOException {
+		return new InputStreamReader(input(file));
+	}
+	
+	public Reader reader(String filename) throws IOException {
+		return reader(file(filename));
 	}
 	
 	public Writer writer(File file) throws IOException {
-		return new OutputStreamWriter(this.output(file));
+		return new OutputStreamWriter(output(file));
 	}
 	
 	public Writer writer(String filename) throws IOException {
-		return this.writer(this.file(filename));
+		return writer(file(filename));
 	}
 	
 	public Writer writer(File file, boolean append) throws IOException {
-		return this.writer(file);
+		return writer(file);
 	}
 	
 	public Writer writer(String filename, boolean append) throws IOException {
-		return this.writer(this.file(filename));
+		return writer(file(filename));
 	}
 	
 	public InputStream input(FileDescriptor fdObj) {

@@ -7,7 +7,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <groupId>hitchfs</groupId>
     <artifactId>hitchfs</artifactId>
     <name>HitchFS</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>
         File systems that don't suck for testing

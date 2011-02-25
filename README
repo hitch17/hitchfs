@@ -25,25 +25,72 @@ The primary benefits are:
     objects such as ByteArrayInputStream or writing to a MessageDigestOutputStream and
     just verifying an md5 sum in your test:  
 
+    // Writing Example
+    String message = "fake file with text.";
+    ByteArrayOutputStream out = new ByteArrayOutputStream(message.length());
+    final MessageDigestOutputStream md5 = md5().setOutput(out);
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException {
+        return md5;
+      }
+    };
+    FakeFile file = fs.file("fakedir/fakefile2.txt");
+    Writer writer = fs.writer(file);
+    writer.write(message);
+    writer.close();
+    assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", md5.getDigestAsHex());
+    assertEquals(message, new String(out.toByteArray()));
+    
     // Reading Example
     String expected = "this is some text in memory.";
-    StubFileSystem fs = new StubFileSystem();
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public InputStream getInputStream(FakeFile fake) throws IOException {
+        StringProp p = fake.getProperty(StringProp.class);
+        if (p == null) {
+          throw new FileNotFoundException();
+        }
+        return new ByteArrayInputStream(p.data.getBytes());
+      }
+    };
     FakeFile file = fs.file("fakedir/doesntexist.txt")
-      .withInputStream(new ByteArrayInputStream(expected.getBytes()));
+      .withProperty(new StringProp(expected));
     Reader reader = fs.reader(file);
-    char[] chars = new char[30];
+    char[] chars = new char[expected.length() + 5];
     int len = reader.read(chars);
     reader.close();
     assertEquals(expected, new String(chars, 0, len));
-    
-    // Writing Example
-    StubFileSystem fs = new StubFileSystem();
-    FakeFile file = fs.file("fakedir/fakefile2.txt");
-    Writer writer = fs.writer(file);
-    writer.write("fake file with text.");
-    writer.close();
-    assertEquals("9d2110c9a94894f10cfee35afaf8ceb2", file.getOutputStream().getDigestAsHex());
-    
+
+    // Reading Example
+    String expected = "this is some text in memory.";
+    StubFileSystem fs = new StubFileSystem() {
+      @Override
+      public InputStream getInputStream(FakeFile fake) throws IOException {
+        StringProp p = fake.getProperty(StringProp.class);
+        if (p == null) {
+          throw new FileNotFoundException();
+        }
+        return new ByteArrayInputStream(p.data.getBytes());
+      }
+    };
+    FakeFile file = fs.file("fakedir/doesntexist.txt")
+      .withProperty(new StringProp(expected));
+    Reader reader = fs.reader(file);
+    char[] chars = new char[expected.length() + 5];
+    int len = reader.read(chars);
+    reader.close();
+    assertEquals(expected, new String(chars, 0, len));
+
+and StringProp is just:
+
+  class StringProp implements FileProp {
+    private final String data;
+    public StringProp(String data) {
+      this.data = data;
+    }
+  }
+
 
 Then, when you're in your real application, just use DefaultFileSystem to get
 the real Java implementations of File, File Streams, and File Reader/Writers.

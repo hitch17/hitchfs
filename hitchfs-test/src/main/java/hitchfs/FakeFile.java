@@ -1,12 +1,8 @@
 package hitchfs;
-import static hitchfs.MessageDigestOutputStream.md5;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -52,8 +48,7 @@ public class FakeFile extends File {
 	}
 	
 	final FakeFileOperations fs;
-	InputStream input;
-	MessageDigestOutputStream output = md5();
+	String absoluteKey = null;
 	Map<Class<? extends FileProp>, FileProp> props = new HashMap<Class<? extends FileProp>, FileProp>();
 
 	public FakeFile(FakeFileOperations fs, File parent, String child) {
@@ -79,8 +74,8 @@ public class FakeFile extends File {
 	public FakeFile(FakeFileOperations fs, File file) {
 		this(fs, "");
 		try {
-			pathField.set(this, pathField.get(file));
-			prefixLengthField.set(this, prefixLengthField.get(file));
+			setPathField((String) pathField.get(file));
+			setPrefixLengthField(prefixLengthField.getInt(file));
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -98,9 +93,20 @@ public class FakeFile extends File {
 		}
 	}
 	
-	public String getPrefixLengthField() {
+	public int getPrefixLengthField() {
 		try {
-			return (String) prefixLengthField.get(this);
+			return prefixLengthField.getInt(this);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public FakeFile setPathField(String path) {
+		try {
+			pathField.set(this, path);
+			return this;
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -108,24 +114,17 @@ public class FakeFile extends File {
 		}
 	}
 
-	public FakeFile withInputStream(InputStream input) {
-		this.input = input;
-		return this;
+	public FakeFile setPrefixLengthField(int prefixLength) {
+		try {
+			prefixLengthField.setInt(this, prefixLength);
+			return this;
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
-	
-	public FakeFile withOutputStream(OutputStream output) {
-		this.output.setOutput(output);
-		return this;
-	}
-	
-	public InputStream getInputStream() {
-		return this.input;
-	}
-	
-	public MessageDigestOutputStream getOutputStream() {
-		return this.output;
-	}
-	
+
 	public FakeFile withProperty(FileProp property) {
 		this.props.put(property.getClass(), property);
 		return this;
@@ -134,6 +133,15 @@ public class FakeFile extends File {
 	@SuppressWarnings("unchecked")
 	public <T extends FileProp> T getProperty(Class<T> prop) {
 		return (T) this.props.get(prop);
+	}
+	
+	public FakeFile setAbsoluteKey(String path) {
+		this.absoluteKey = path;
+		return this;
+	}
+	
+	public String getAbsoluteKey() {
+		return this.absoluteKey;
 	}
 	
 	@Override

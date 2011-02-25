@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -121,5 +123,9 @@ public interface FakeFileOperations {
 	public abstract String getParent(FakeFile fake);
 
 	public abstract String getPath(FakeFile fake);
+	
+	public abstract InputStream getInputStream(FakeFile fake) throws IOException;
+
+	public abstract OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException;
 	
 }

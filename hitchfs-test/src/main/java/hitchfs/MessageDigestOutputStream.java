@@ -67,8 +67,9 @@ public class MessageDigestOutputStream extends OutputStream {
 		return closed;
 	}
 	
-	public void setOutput(OutputStream output) {
+	public MessageDigestOutputStream setOutput(OutputStream output) {
 		this.output = output;
+		return this;
 	}
 	
 	public boolean isEqual(byte[] expected){
