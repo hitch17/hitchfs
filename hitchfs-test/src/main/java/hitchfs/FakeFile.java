@@ -48,7 +48,7 @@ public class FakeFile extends File {
 	}
 	
 	final FakeFileOperations fs;
-	String absoluteKey = null;
+	String key = null;
 	Map<Class<? extends FileProp>, FileProp> props = new HashMap<Class<? extends FileProp>, FileProp>();
 
 	public FakeFile(FakeFileOperations fs, File parent, String child) {
@@ -135,13 +135,13 @@ public class FakeFile extends File {
 		return (T) this.props.get(prop);
 	}
 	
-	public FakeFile setAbsoluteKey(String path) {
-		this.absoluteKey = path;
+	public FakeFile setKey(String key) {
+		this.key = key;
 		return this;
 	}
 	
-	public String getAbsoluteKey() {
-		return this.absoluteKey;
+	public String getKey() {
+		return this.key;
 	}
 	
 	@Override

@@ -136,19 +136,19 @@ public class StubFileSystemTest {
 			}
 		};
 		
-		assertEquals("/a/b/c", fs.repath("c"));
-		assertEquals("/a/b/c", fs.repath("c/"));
-		assertEquals("/a/b/c", fs.repath("c/"));
-		assertEquals("/a/b/c/d", fs.repath("c/d"));
-		assertEquals("/a/b/c/d", fs.repath("c/d/"));
-		assertEquals("/c", fs.repath("/c"));
-		assertEquals("/c", fs.repath("/c/"));
-		assertEquals("/c/d", fs.repath("/c/d"));
-		assertEquals("/c/d", fs.repath("/c/d/"));
-		assertEquals("/a/c", fs.repath("../c"));
-		assertEquals("/a/b/c", fs.repath("./c/"));
-		assertEquals("/a/b/~/d", fs.repath("~/d"));
-		assertEquals("/d", fs.repath("/c/../d/"));
+		assertEquals("/a/b/c", fs.getAbsolutePath("c"));
+		assertEquals("/a/b/c", fs.getAbsolutePath("c/"));
+		assertEquals("/a/b/c", fs.getAbsolutePath("c/"));
+		assertEquals("/a/b/c/d", fs.getAbsolutePath("c/d"));
+		assertEquals("/a/b/c/d", fs.getAbsolutePath("c/d/"));
+		assertEquals("/c", fs.getAbsolutePath("/c"));
+		assertEquals("/c", fs.getAbsolutePath("/c/"));
+		assertEquals("/c/d", fs.getAbsolutePath("/c/d"));
+		assertEquals("/c/d", fs.getAbsolutePath("/c/d/"));
+		assertEquals("/a/c", fs.getAbsolutePath("../c"));
+		assertEquals("/a/b/c", fs.getAbsolutePath("./c/"));
+		assertEquals("/a/b/~/d", fs.getAbsolutePath("~/d"));
+		assertEquals("/d", fs.getAbsolutePath("/c/../d/"));
 
 	}
 	
@@ -157,7 +157,7 @@ public class StubFileSystemTest {
 		StubFileSystem fs = new StubFileSystem() {
 			@Override
 			public String getAbsolutePath(FakeFile fake) {
-				return fake.getAbsoluteKey();
+				return fake.getKey();
 			}
 			@Override
 			public String getPath(FakeFile fake) {
@@ -269,10 +269,10 @@ public class StubFileSystemTest {
 			Map<String, FakeFile> registry = new HashMap<String, FakeFile>();
 			@Override
 			public FakeFile register(FakeFile file) {
-				FakeFile f = registry.get(file.getAbsoluteKey());
+				FakeFile f = registry.get(file.getKey());
 				if (f == null) {
 					f = file;
-					registry.put(f.getAbsoluteKey(), f);
+					registry.put(f.getKey(), f);
 				}
 				return f;
 			}

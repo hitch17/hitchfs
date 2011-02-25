@@ -41,37 +41,44 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		this.operations = operations;
 	}
 	
-	
 	public FakeFile file(File parent, String child) {
-		return register(new FakeFile(getFileOperations(), parent, child));
+		return update(new FakeFile(getFileOperations(), parent, child));
 	}
 	
 	public FakeFile file(String parent, String child) {
-		return register(new FakeFile(getFileOperations(), parent, child));
+		return update(new FakeFile(getFileOperations(), parent, child));
 	}
 	
 	public FakeFile file(String pathname) {
-		return register(new FakeFile(getFileOperations(), pathname));
+		return update(new FakeFile(getFileOperations(), pathname));
 	}
 	
 	public FakeFile file(URI uri) {
-		return register(new FakeFile(getFileOperations(), uri));
+		return update(new FakeFile(getFileOperations(), uri));
 	}
 
 	public FakeFile file(File regular) {
 		if (regular instanceof FakeFile) {
-			return register((FakeFile) regular);
+			return update((FakeFile) regular);
 		} else {
-			return register(new FakeFile(getFileOperations(), regular));
+			return update(new FakeFile(getFileOperations(), regular));
 		}
 	}
 	
 	public FakeFileOperations getFileOperations() {
-		return operations ;
+		return operations;
 	}
 	
+	/**
+	 * Updates the FakeFile with an absolute key based on the current
+	 * directory of this file system.
+	 */
+	public FakeFile update(FakeFile file) {
+		return register(file.setKey(getAbsolutePath(file._getPath())));
+	}
+
 	public FakeFile register(FakeFile file) {
-		return file.setAbsoluteKey(repath(file._getPath()));
+		return file;
 	}
 	
 	public String getCurrentDirectory() {
@@ -82,16 +89,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return skip(asList(getCurrentDirectory().split("/")), 1);
 	}
 	
-	public String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
-		StringBuilder buffer = new StringBuilder();
-		if (absolute) {
-			buffer.append(pathDelim);
-		}
-		on(pathDelim).appendTo(buffer, ps);
-		return buffer.toString();
-	}
-	
-	public String repath(String path) {
+	public String getAbsolutePath(String path) {
 		LinkedList<String> ps = newLinkedList();
 		if (!path.startsWith(separator)) {
 			for (String p : getCurrentDirectorySplit()) {
@@ -107,7 +105,16 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		}
 		return makePath(ps, separator, true);
 	}
-	
+
+	String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
+		StringBuilder buffer = new StringBuilder();
+		if (absolute) {
+			buffer.append(pathDelim);
+		}
+		on(pathDelim).appendTo(buffer, ps);
+		return buffer.toString();
+	}
+
 	public InputStream input(File file) throws IOException {
 		return getInputStream(file(file));
 	}
