@@ -74,7 +74,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	 * directory of this file system.
 	 */
 	public FakeFile update(FakeFile file) {
-		return register(file.setKey(getAbsolutePath(file._getPath())));
+		return register(file.setKey(canonical(file._getPath())));
 	}
 
 	public FakeFile register(FakeFile file) {
@@ -89,7 +89,26 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return skip(asList(getCurrentDirectory().split("/")), 1);
 	}
 	
-	public String getAbsolutePath(String path) {
+	public static boolean isRelative(String path) {
+		return !path.startsWith(separator);
+	}
+	
+	public String absolute(String path) {
+		LinkedList<String> ps = newLinkedList();
+		if (isRelative(path)) {
+			for (String p : getCurrentDirectorySplit()) {
+				ps.addLast(p);
+			}
+		}
+		for (String p : path.split(separator)) {
+			if (!"".equals(p)) {
+				ps.addLast(p);
+			}
+		}
+		return makePath(ps, separator, true);
+	}
+	
+	public String canonical(String path) {
 		LinkedList<String> ps = newLinkedList();
 		if (!path.startsWith(separator)) {
 			for (String p : getCurrentDirectorySplit()) {
@@ -106,7 +125,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return makePath(ps, separator, true);
 	}
 
-	String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
+	public static String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
 		StringBuilder buffer = new StringBuilder();
 		if (absolute) {
 			buffer.append(pathDelim);

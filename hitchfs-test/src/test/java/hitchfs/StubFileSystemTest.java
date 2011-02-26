@@ -135,20 +135,34 @@ public class StubFileSystemTest {
 				return "/a/b";
 			}
 		};
+
+		assertEquals("/a/b/c", fs.canonical("c"));
+		assertEquals("/a/b/c", fs.canonical("c/"));
+		assertEquals("/a/b/c", fs.canonical("c/"));
+		assertEquals("/a/b/c/d", fs.canonical("c/d"));
+		assertEquals("/a/b/c/d", fs.canonical("c/d/"));
+		assertEquals("/c", fs.canonical("/c"));
+		assertEquals("/c", fs.canonical("/c/"));
+		assertEquals("/c/d", fs.canonical("/c/d"));
+		assertEquals("/c/d", fs.canonical("/c/d/"));
+		assertEquals("/a/c", fs.canonical("../c"));
+		assertEquals("/a/b/c", fs.canonical("./c/"));
+		assertEquals("/a/b/~/d", fs.canonical("~/d"));
+		assertEquals("/d", fs.canonical("/c/../d/"));
 		
-		assertEquals("/a/b/c", fs.getAbsolutePath("c"));
-		assertEquals("/a/b/c", fs.getAbsolutePath("c/"));
-		assertEquals("/a/b/c", fs.getAbsolutePath("c/"));
-		assertEquals("/a/b/c/d", fs.getAbsolutePath("c/d"));
-		assertEquals("/a/b/c/d", fs.getAbsolutePath("c/d/"));
-		assertEquals("/c", fs.getAbsolutePath("/c"));
-		assertEquals("/c", fs.getAbsolutePath("/c/"));
-		assertEquals("/c/d", fs.getAbsolutePath("/c/d"));
-		assertEquals("/c/d", fs.getAbsolutePath("/c/d/"));
-		assertEquals("/a/c", fs.getAbsolutePath("../c"));
-		assertEquals("/a/b/c", fs.getAbsolutePath("./c/"));
-		assertEquals("/a/b/~/d", fs.getAbsolutePath("~/d"));
-		assertEquals("/d", fs.getAbsolutePath("/c/../d/"));
+		assertEquals("/a/b/c", fs.absolute("c"));
+		assertEquals("/a/b/c", fs.absolute("c/"));
+		assertEquals("/a/b/c", fs.absolute("c/"));
+		assertEquals("/a/b/c/d", fs.absolute("c/d"));
+		assertEquals("/a/b/c/d", fs.absolute("c/d/"));
+		assertEquals("/c", fs.absolute("/c"));
+		assertEquals("/c", fs.absolute("/c/"));
+		assertEquals("/c/d", fs.absolute("/c/d"));
+		assertEquals("/c/d", fs.absolute("/c/d/"));
+		assertEquals("/a/b/../c", fs.absolute("../c"));
+		assertEquals("/a/b/./c", fs.absolute("./c/"));
+		assertEquals("/a/b/~/d", fs.absolute("~/d"));
+		assertEquals("/c/../d", fs.absolute("/c/../d/"));
 
 	}
 	
