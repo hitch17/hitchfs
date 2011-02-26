@@ -93,7 +93,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return !path.startsWith(separator);
 	}
 	
-	public String absolute(String path) {
+	public Iterable<String> absoluteSplit(String path) {
 		LinkedList<String> ps = newLinkedList();
 		if (isRelative(path)) {
 			for (String p : getCurrentDirectorySplit()) {
@@ -105,10 +105,14 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 				ps.addLast(p);
 			}
 		}
-		return makePath(ps, separator, true);
+		return ps;
 	}
 	
-	public String canonical(String path) {
+	public String absolute(String path) {
+		return makePath(absoluteSplit(path), separator, true);
+	}
+	
+	public Iterable<String> canonicalSplit(String path) {
 		LinkedList<String> ps = newLinkedList();
 		if (!path.startsWith(separator)) {
 			for (String p : getCurrentDirectorySplit()) {
@@ -116,13 +120,19 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 			}
 		}
 		for (String p : path.split(separator)) {
-			if ("..".equals(p) && ps.size() > 0) {
-				ps.removeLast();
+			if ("..".equals(p)) {
+				if (ps.size() > 0) {
+					ps.removeLast();
+				}
 			} else if (!".".equals(p) && !"".equals(p)) {
 				ps.addLast(p);
 			}
 		}
-		return makePath(ps, separator, true);
+		return ps;
+	}
+	
+	public String canonical(String path) {
+		return makePath(canonicalSplit(path), separator, true);
 	}
 
 	public static String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {

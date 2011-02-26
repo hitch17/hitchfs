@@ -21,8 +21,10 @@ import org.junit.Test;
 public class BasicFileSystemTest {
 
 	@Test
-	public void testStubFileSystem() throws Exception {
-		System.setProperty("user.dir", "/xyzabc");
+	public void testBasicFileSystem() throws Exception {
+		// must use an non-existent user directory or else some tests will fail.
+		System.setProperty("user.dir", "/xyzabc"); 
+
 		BasicFileSystem fs = new BasicFileSystem();
 		String filename = "c";
 		checkTheSame(new File(filename), fs.file(filename));

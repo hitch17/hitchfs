@@ -126,7 +126,6 @@ public class StubFileSystemTest {
 		assertEquals(message, new String(out.toByteArray()));
 	}
 	
-
 	@Test
 	public void testCombos() {
 		StubFileSystem fs = new StubFileSystem() {
@@ -149,6 +148,7 @@ public class StubFileSystemTest {
 		assertEquals("/a/b/c", fs.canonical("./c/"));
 		assertEquals("/a/b/~/d", fs.canonical("~/d"));
 		assertEquals("/d", fs.canonical("/c/../d/"));
+		assertEquals("/c", fs.canonical("../../c"));
 		
 		assertEquals("/a/b/c", fs.absolute("c"));
 		assertEquals("/a/b/c", fs.absolute("c/"));
@@ -164,6 +164,17 @@ public class StubFileSystemTest {
 		assertEquals("/a/b/~/d", fs.absolute("~/d"));
 		assertEquals("/c/../d", fs.absolute("/c/../d/"));
 
+	}
+	
+	@Test
+	public void testBackDirFromRoot() {
+		StubFileSystem fs = new StubFileSystem() {
+			@Override
+			public String getCurrentDirectory() {
+				return "/";
+			}
+		};
+		assertEquals("/a", fs.canonical("../a"));
 	}
 	
 	@Test
