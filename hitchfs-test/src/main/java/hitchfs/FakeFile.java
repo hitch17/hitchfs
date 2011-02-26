@@ -129,6 +129,11 @@ public class FakeFile extends File {
 		this.props.put(property.getClass(), property);
 		return this;
 	}
+	
+	public <T extends FileProp> FakeFile withProperty(Class<T> type, T value) {
+		this.props.put(type, value);
+		return this;
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends FileProp> T getProperty(Class<T> prop) {

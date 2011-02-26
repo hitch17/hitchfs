@@ -39,4 +39,28 @@ public class FilePropTest {
 		}
 	}
 	
+	@Test
+	public void testProp2() {
+		StubFileSystem fs = new StubFileSystem() {
+			@Override
+			public long length(FakeFile fake) {
+				// If the file has a property, return its value, otherwise return -1
+				LengthTestProp p = fake.getProperty(LengthTestProp.class);
+				return (p!=null) ? p.len : -1;
+			}
+		};
+		assertEquals(200, fs.file("one").withProperty(LengthTestProp.class, 
+				new DoubleLengthTestProp(100)).length());
+		assertEquals(100, fs.file("two").withProperty(LengthTestProp.class, 
+				new DoubleLengthTestProp(50)).length());
+		assertEquals(-1, fs.file("three").length());
+	}
+	
+	static class DoubleLengthTestProp extends LengthTestProp {
+		public DoubleLengthTestProp(int len) {
+			super(len*2);
+		}
+	}
+
+	
 }

@@ -19,12 +19,6 @@ import java.net.URL;
  */
 public class BasicFileSystem extends StubFileSystem {
 
-	public BasicFileSystem() {}
-
-	public BasicFileSystem(FakeFileOperations operations) {
-		super(operations);
-	}
-
 	@Override
 	public String getPath(FakeFile fake) {
 		return fake._getPath();
