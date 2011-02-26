@@ -61,7 +61,7 @@ public class StubFakeFileOperations implements FakeFileOperations {
 		throw new UnsupportedOperationException();
 	}
 
-	public File geAbsoluteFile(FakeFile fake) {
+	public File getAbsoluteFile(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -99,7 +99,7 @@ public interface FakeFileOperations {
 	@Deprecated
 	public abstract URL toURL(FakeFile fake) throws MalformedURLException;
 
-	public abstract File geAbsoluteFile(FakeFile fake);
+	public abstract File getAbsoluteFile(FakeFile fake);
 
 	public abstract String getAbsolutePath(FakeFile fake);
 

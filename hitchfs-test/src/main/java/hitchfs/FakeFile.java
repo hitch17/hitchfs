@@ -181,7 +181,7 @@ public class FakeFile extends File {
 
 	@Override
 	public File getAbsoluteFile() {
-		return this.fs.geAbsoluteFile(this);
+		return this.fs.getAbsoluteFile(this);
 	}
 
 	@Override
