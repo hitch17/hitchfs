@@ -1,7 +1,10 @@
 package hitchfs;
 
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -54,6 +57,11 @@ public class FilePropTest {
 		assertEquals(100, fs.file("two").withProperty(LengthTestProp.class, 
 				new DoubleLengthTestProp(50)).length());
 		assertEquals(-1, fs.file("three").length());
+		
+		assertFalse(fs.file("test").hasProperty(LengthTestProp.class));
+		assertTrue(fs.file("test").withProperty(new LengthTestProp(5))
+			.hasProperty(LengthTestProp.class));
+		
 	}
 	
 	static class DoubleLengthTestProp extends LengthTestProp {

@@ -7,8 +7,6 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * Licensed under the Apache License,
@@ -49,7 +47,7 @@ public class FakeFile extends File {
 	
 	final FakeFileOperations fs;
 	String key = null;
-	Map<Class<? extends FileProp>, FileProp> props = new HashMap<Class<? extends FileProp>, FileProp>();
+	PropStore props = new PropStore();
 
 	public FakeFile(FakeFileOperations fs, File parent, String child) {
 		super(parent, child);
@@ -126,20 +124,31 @@ public class FakeFile extends File {
 	}
 
 	public FakeFile withProperty(FileProp property) {
-		this.props.put(property.getClass(), property);
+		props.withProperty(property);
 		return this;
 	}
 	
 	public <T extends FileProp> FakeFile withProperty(Class<T> type, T value) {
-		this.props.put(type, value);
+		props.withProperty(type, value);
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T extends FileProp> T getProperty(Class<T> prop) {
-		return (T) this.props.get(prop);
+		return props.getProperty(prop);
 	}
 	
+	public PropStore getProperties() {
+		return this.props;
+	}
+	
+	public void setProperties(PropStore props) {
+		this.props = props;
+	}
+
+	public boolean hasProperty(Class<?> type) {
+		return this.props.hasProperty(type);
+	}
+
 	public FakeFile setKey(String key) {
 		this.key = key;
 		return this;
