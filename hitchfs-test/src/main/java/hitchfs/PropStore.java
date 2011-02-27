@@ -35,9 +35,21 @@ public class PropStore {
 		return visitor.none(this);
 	}
 	
+	public Map<Class<? extends FileProp>, FileProp> getMap() {
+		return this.props;
+	}
+	
+	public Map<Class<? extends FileProp>, FileProp> setMap(
+			Map<Class<? extends FileProp>, FileProp> props) {
+		Map<Class<? extends FileProp>, FileProp> old = this.props;
+		this.props = props;
+		return old;
+	}
+
 	public static interface PropVisitor<P, S> {
 		public S some(P p);
 		public S none(PropStore props);
 	}
+
 	
 }

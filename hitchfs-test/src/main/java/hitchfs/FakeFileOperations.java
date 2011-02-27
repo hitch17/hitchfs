@@ -51,6 +51,8 @@ public interface FakeFileOperations {
 	public abstract boolean isFile(FakeFile fake);
 
 	public abstract boolean isHidden(FakeFile fake);
+	
+	public abstract void setHidden(FakeFile fakeFile, boolean hidden);
 
 	public abstract long lastModified(FakeFile fake);
 
@@ -127,5 +129,7 @@ public interface FakeFileOperations {
 	public abstract InputStream getInputStream(FakeFile fake) throws IOException;
 
 	public abstract OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException;
+
+	public abstract void touch(FakeFile fake);
 	
 }

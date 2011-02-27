@@ -125,6 +125,14 @@ public class StubFakeFileOperations implements FakeFileOperations {
 		throw new UnsupportedOperationException();
 	}
 
+	public void setHidden(FakeFile fake, boolean hidden) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void touch(FakeFile fake) {
+		throw new UnsupportedOperationException();
+	}
+	
 	public long lastModified(FakeFile fake) {
 		throw new UnsupportedOperationException();
 	}

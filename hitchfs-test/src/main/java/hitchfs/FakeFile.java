@@ -397,6 +397,14 @@ public class FakeFile extends File {
 		return this.fs.getPath(this);
 	}
 
+	public void setHidden(boolean hidden) {
+		this.fs.setHidden(this, hidden);
+	}
+	
+	public void touch() {
+		this.fs.touch(this);
+	}
+
 	public boolean _canExecute() {
 		return super.canExecute();
 	}

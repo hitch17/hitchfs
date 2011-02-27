@@ -3,7 +3,6 @@ package hitchfs;
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.Iterables.skip;
 import static com.google.common.collect.Lists.newLinkedList;
-import static java.io.File.separator;
 import static java.util.Arrays.asList;
 
 import java.io.File;
@@ -32,6 +31,11 @@ import java.util.LinkedList;
  * A stub of a FileSystem for use in testing. 
  */
 public class StubFileSystem extends StubFakeFileOperations implements FileSystem {
+	
+	String separator = File.separator;
+	char separatorChar = File.separatorChar;
+	String pathSeparator = File.pathSeparator;
+	char pathSeparatorChar = File.pathSeparatorChar;
 	
 	FakeFileOperations operations = this;
 
@@ -80,6 +84,10 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	public FakeFile register(FakeFile file) {
 		return file;
 	}
+
+	public long currentTimeMillis() {
+		return System.currentTimeMillis();
+	}
 	
 	public String getCurrentDirectory() {
 		return System.getProperty("user.dir");
@@ -89,8 +97,24 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return skip(asList(getCurrentDirectory().split("/")), 1);
 	}
 	
-	public static boolean isRelative(String path) {
-		return !path.startsWith(separator);
+	public boolean isRelative(String path) {
+		return !path.startsWith(getSeparator());
+	}
+	
+	public String getSeparator() {
+		return separator;
+	}
+	
+	public char getSeparatorChar() {
+		return separatorChar;
+	}
+	
+	public String getPathSeparator() {
+		return pathSeparator;
+	}
+
+	public char getPathSeparatorChar() {
+		return pathSeparatorChar;
 	}
 	
 	public Iterable<String> absoluteSplit(String path) {
@@ -100,7 +124,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 				ps.addLast(p);
 			}
 		}
-		for (String p : path.split(separator)) {
+		for (String p : path.split(getSeparator())) {
 			if (!"".equals(p)) {
 				ps.addLast(p);
 			}
@@ -109,17 +133,17 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 	
 	public String absolute(String path) {
-		return makePath(absoluteSplit(path), separator, true);
+		return makePath(absoluteSplit(path), getSeparator(), true);
 	}
 	
 	public Iterable<String> canonicalSplit(String path) {
 		LinkedList<String> ps = newLinkedList();
-		if (!path.startsWith(separator)) {
+		if (!path.startsWith(getSeparator())) {
 			for (String p : getCurrentDirectorySplit()) {
 				ps.addLast(p);
 			}
 		}
-		for (String p : path.split(separator)) {
+		for (String p : path.split(getSeparator())) {
 			if ("..".equals(p)) {
 				if (ps.size() > 0) {
 					ps.removeLast();
@@ -132,7 +156,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 	
 	public String canonical(String path) {
-		return makePath(canonicalSplit(path), separator, true);
+		return makePath(canonicalSplit(path), getSeparator(), true);
 	}
 
 	public static String makePath(Iterable<String> ps, String pathDelim, boolean absolute) {
@@ -142,6 +166,18 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		}
 		on(pathDelim).appendTo(buffer, ps);
 		return buffer.toString();
+	}
+
+	public File createTempFile(String suffix, String prefix)  throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	public File createTempFile(String suffix, String prefix, File directory) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	public File[] listRoots() {
+		throw new UnsupportedOperationException();
 	}
 
 	public InputStream input(File file) throws IOException {
