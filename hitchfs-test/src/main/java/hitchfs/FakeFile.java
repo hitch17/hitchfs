@@ -1,4 +1,6 @@
 package hitchfs;
+import hitchfs.PropStore.PropVisitor;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -147,6 +149,10 @@ public class FakeFile extends File {
 
 	public boolean hasProperty(Class<?> type) {
 		return this.props.hasProperty(type);
+	}
+	
+	public <P extends FileProp, S> S visitProperty(Class<P> type, PropVisitor<P, S> visitor) {
+		return this.props.visitProperty(type, visitor);
 	}
 
 	public FakeFile setKey(String key) {

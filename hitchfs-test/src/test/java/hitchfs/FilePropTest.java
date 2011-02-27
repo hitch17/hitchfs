@@ -4,7 +4,7 @@ package hitchfs;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-import junit.framework.Assert;
+import hitchfs.PropStore.PropVisitor;
 
 import org.junit.Test;
 
@@ -58,9 +58,32 @@ public class FilePropTest {
 				new DoubleLengthTestProp(50)).length());
 		assertEquals(-1, fs.file("three").length());
 		
-		assertFalse(fs.file("test").hasProperty(LengthTestProp.class));
-		assertTrue(fs.file("test").withProperty(new LengthTestProp(5))
-			.hasProperty(LengthTestProp.class));
+		FakeFile file = fs.file("test");
+		assertFalse(file.hasProperty(LengthTestProp.class));
+		file.withProperty(new LengthTestProp(5));
+		assertTrue(file.hasProperty(LengthTestProp.class));
+		
+		assertTrue(file.visitProperty(DoubleLengthTestProp.class, 
+				new PropVisitor<DoubleLengthTestProp, Boolean>() {
+			@Override
+			public Boolean none(PropStore props) {
+				return true;
+			}
+			@Override
+			public Boolean some(DoubleLengthTestProp p) {
+				return false;
+			}}));
+		
+		assertTrue(file.visitProperty(LengthTestProp.class, 
+				new PropVisitor<LengthTestProp, Boolean>() {
+			@Override
+			public Boolean none(PropStore props) {
+				return false;
+			}
+			@Override
+			public Boolean some(LengthTestProp p) {
+				return true;
+			}}));
 		
 	}
 	

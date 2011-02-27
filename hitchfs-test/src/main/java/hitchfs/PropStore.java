@@ -27,4 +27,17 @@ public class PropStore {
 		return props.containsKey(type);
 	}
 	
+	public <P extends FileProp, S> S visitProperty(Class<P> type, PropVisitor<P, S> visitor) {
+		P p = getProperty(type);
+		if (p != null) {
+			return visitor.some(p);
+		}
+		return visitor.none(this);
+	}
+	
+	public static interface PropVisitor<P, S> {
+		public S some(P p);
+		public S none(PropStore props);
+	}
+	
 }
