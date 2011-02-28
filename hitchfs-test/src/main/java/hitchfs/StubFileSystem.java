@@ -36,6 +36,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	char separatorChar = File.separatorChar;
 	String pathSeparator = File.pathSeparator;
 	char pathSeparatorChar = File.pathSeparatorChar;
+	boolean caseSensitive = (separatorChar == '/');
 	
 	FakeFileOperations operations = this;
 
@@ -78,7 +79,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	 * directory of this file system.
 	 */
 	public FakeFile update(FakeFile file) {
-		return register(file.setKey(canonical(file._getPath())));
+		return register(file.setKey(canonical(file.getPathField())));
 	}
 
 	public FakeFile register(FakeFile file) {
@@ -97,8 +98,27 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return skip(asList(getCurrentDirectory().split("/")), 1);
 	}
 	
-	public boolean isRelative(String path) {
-		return !path.startsWith(getSeparator());
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
+	public boolean isAbsolute(String path) {
+		if (getSeparatorChar() == '\\') {
+			// for windows
+			if (path.length() > 1 && path.charAt(0) == getSeparatorChar()
+					&& path.charAt(1) == getSeparatorChar()) {
+				return true;
+			}
+			if (path.length() > 2) {
+				if (Character.isLetter(path.charAt(0)) && path.charAt(1) == ':'
+					&& (path.charAt(2) == '/' || path.charAt(2) == '\\')) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// for Linux
+		return (path.length() > 0 && path.charAt(0) == getSeparatorChar());
 	}
 	
 	public String getSeparator() {
@@ -117,9 +137,13 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 		return pathSeparatorChar;
 	}
 	
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+	
 	public Iterable<String> absoluteSplit(String path) {
 		LinkedList<String> ps = newLinkedList();
-		if (isRelative(path)) {
+		if (!isAbsolute(path)) {
 			for (String p : getCurrentDirectorySplit()) {
 				ps.addLast(p);
 			}
@@ -243,5 +267,5 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	public Writer writer(FileDescriptor fdObj) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 }

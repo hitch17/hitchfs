@@ -51,31 +51,70 @@ public class FakeFile extends File {
 	String key = null;
 	PropStore props = new PropStore();
 
-	public FakeFile(FakeFileOperations fs, File parent, String child) {
-		super(parent, child);
-		this.fs = fs;
-	}
-
-	public FakeFile(FakeFileOperations fs, String parent, String child) {
-		super(parent, child);
-		this.fs = fs;
-	}
-
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	public FakeFile(FakeFileOperations fs, String pathname) {
 		super(pathname);
 		this.fs = fs;
+		setPathField(fixSlashes(pathname));
 	}
 
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
+	public FakeFile(FakeFileOperations fs, File parent, String child) {
+		this(fs, "");
+		if (child == null) {
+			throw new NullPointerException();
+		}
+		if (parent == null) {
+			setPathField(fixSlashes(child));
+		} else {
+			setPathField(calculatePath(getPathField(parent), child));
+		}		
+	}
+
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
+	public FakeFile(FakeFileOperations fs, String parent, String child) {
+		this(fs, "");
+		if (child == null) {
+			throw new NullPointerException();
+		}
+		if (parent == null) {
+			setPathField(fixSlashes(child));
+		} else {
+			setPathField(calculatePath(parent, child));
+		}		
+	}
+
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	public FakeFile(FakeFileOperations fs, URI uri) {
-		super(uri);
-		this.fs = fs;
+		this(fs, "");
+		checkURI(uri);
+		setPathField(fixSlashes(uri.getPath()));
 	}
 	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	public FakeFile(FakeFileOperations fs, File file) {
 		this(fs, "");
+		setPathField(getPathField(file));
+		setPrefixLengthField(getPrefixLength(file));
+	}
+
+	public String getPathField() {
+		return getPathField(this);
+	}
+
+	public static String getPathField(File file) {
 		try {
-			setPathField((String) pathField.get(file));
-			setPrefixLengthField(prefixLengthField.getInt(file));
+			return (String) pathField.get(file);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -83,9 +122,9 @@ public class FakeFile extends File {
 		}
 	}
 
-	public String getPathField() {
+	public static int getPrefixLength(File file) {
 		try {
-			return (String) pathField.get(this);
+			return prefixLengthField.getInt(file);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -94,13 +133,7 @@ public class FakeFile extends File {
 	}
 	
 	public int getPrefixLengthField() {
-		try {
-			return prefixLengthField.getInt(this);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		return getPrefixLength(this);
 	}
 	
 	public FakeFile setPathField(String path) {
@@ -404,7 +437,7 @@ public class FakeFile extends File {
 	public void touch() {
 		this.fs.touch(this);
 	}
-
+	
 	public boolean _canExecute() {
 		return super.canExecute();
 	}
@@ -591,6 +624,120 @@ public class FakeFile extends File {
 	@Deprecated
 	public URL _toURL() throws MalformedURLException {
 		return super.toURL();
+	}
+	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
+	void checkURI(URI uri) {
+		if (!uri.isAbsolute()) {
+			throw new IllegalArgumentException(uri.toString());
+		} else if (!uri.getRawSchemeSpecificPart().startsWith("/")) {
+			throw new IllegalArgumentException(uri.toString());
+		}
+
+		String temp = uri.getScheme();
+		if (temp == null || !temp.equals("file")) {
+			throw new IllegalArgumentException(uri.toString());
+		}
+
+		temp = uri.getRawPath();
+		if (temp == null || temp.length() == 0) {
+			throw new IllegalArgumentException(uri.toString());
+		}
+
+		if (uri.getRawAuthority() != null) {
+			throw new IllegalArgumentException("authority " + uri.toString());
+		}
+
+		if (uri.getRawQuery() != null) {
+			throw new IllegalArgumentException("query " + uri.toString());
+		}
+
+		if (uri.getRawFragment() != null) {
+			throw new IllegalArgumentException("fragment " + uri.toString());
+		}
+	}
+	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
+	String calculatePath(String dirPath, String name) {
+		dirPath = fixSlashes(dirPath);
+		if (!name.equals("") || dirPath.equals("")) {
+			// Remove all the proceeding separator chars from name
+			name = fixSlashes(name);
+
+			int separatorIndex = 0;
+			while ((separatorIndex < name.length())
+					&& (name.charAt(separatorIndex) == fs.getSeparatorChar())) {
+				separatorIndex++;
+			}
+			if (separatorIndex > 0) {
+				name = name.substring(separatorIndex, name.length());
+			}
+
+			// Ensure there is a separator char between dirPath and name
+			if (dirPath.length() > 0
+					&& (dirPath.charAt(dirPath.length() - 1) == fs.getSeparatorChar())) {
+				return dirPath + name;
+			}
+			return dirPath + fs.getSeparatorChar() + name;
+		}
+
+		return dirPath;
+	}
+
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 * 
+	 * The purpose of this method is to take a path and fix the slashes up. This
+	 * includes changing them all to the current platforms fileSeparator and
+	 * removing duplicates.
+	 */
+	String fixSlashes(String origPath) {
+		int uncIndex = 1;
+		int length = origPath.length(), newLength = 0;
+		if (fs.getSeparatorChar() == '/') {
+			uncIndex = 0;
+		} else if (length > 2 && origPath.charAt(1) == ':') {
+			uncIndex = 2;
+		}
+
+		boolean foundSlash = false;
+		char newPath[] = origPath.toCharArray();
+		for (int i = 0; i < length; i++) {
+			char pathChar = newPath[i];
+			if ((fs.getSeparatorChar() == '\\' && pathChar == '\\')
+					|| pathChar == '/') {
+				/* UNC Name requires 2 leading slashes */
+				if ((foundSlash && i == uncIndex) || !foundSlash) {
+					newPath[newLength++] = fs.getSeparatorChar();
+					foundSlash = true;
+				}
+			} else {
+				// check for leading slashes before a drive
+				if (pathChar == ':'
+					&& uncIndex > 0
+					&& (newLength == 2 || (newLength == 3 && newPath[1] == fs.getSeparatorChar()))
+					&& newPath[0] == fs.getSeparatorChar()) {
+					newPath[0] = newPath[newLength - 1];
+					newLength = 1;
+					// allow trailing slash after drive letter
+					uncIndex = 2;
+				}
+				newPath[newLength++] = pathChar;
+				foundSlash = false;
+			}
+		}
+		// remove trailing slash
+		if (foundSlash
+				&& (newLength > (uncIndex + 1) || (newLength == 2 
+						&& newPath[0] != fs.getSeparatorChar()))) {
+			newLength--;
+		}
+
+		return new String(newPath, 0, newLength);
 	}
 
 }

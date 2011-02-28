@@ -21,12 +21,12 @@ public class BasicFileSystem extends StubFileSystem {
 
 	@Override
 	public String getPath(FakeFile fake) {
-		return fake._getPath();
+		return fake.getPathField();
 	}
 	
 	@Override
 	public String toString(FakeFile fake) {
-		return fake._toString();
+		return fake.getPath();
 	}
 	
 	@Override
@@ -38,10 +38,29 @@ public class BasicFileSystem extends StubFileSystem {
 	public File getAbsoluteFile(FakeFile fake) {
 		return file(fake.getAbsolutePath());
 	}
-	
+
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	@Override
 	public String getParent(FakeFile fake) {
-		return fake._getParent();
+		String path = fake.getPath();
+		int length = path.length(), firstInPath = 0;
+		if (getSeparatorChar() == '\\' && length > 2 && path.charAt(1) == ':') {
+			firstInPath = 2;
+		}
+		int index = path.lastIndexOf(getSeparatorChar());
+		if (index == -1 && firstInPath > 0) {
+			index = 2;
+		}
+		if (index == -1 || path.charAt(length - 1) == getSeparatorChar()) {
+			return null;
+		}
+		if (path.indexOf(getSeparatorChar()) == index
+				&& path.charAt(firstInPath) == getSeparatorChar()) {
+			return path.substring(0, index + 1);
+		}
+		return path.substring(0, index);
 	}
 	
 	@Override
@@ -64,14 +83,20 @@ public class BasicFileSystem extends StubFileSystem {
 		return file(fake.getCanonicalPath());
 	}
 	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	@Override
 	public String getName(FakeFile fake) {
-		return fake._getName();
+		String path = fake.getPath();
+		int separatorIndex = path.lastIndexOf(separator);
+		return (separatorIndex < 0) ? path : path.substring(separatorIndex + 1,
+				path.length());	
 	}
 	
 	@Override
 	public boolean isAbsolute(FakeFile fake) {
-		return !isRelative(fake.getPath());
+		return isAbsolute(fake.getPath());
 	}
 	
 	@Override
@@ -81,26 +106,63 @@ public class BasicFileSystem extends StubFileSystem {
 	
 	@Override
 	public boolean equals(FakeFile fake, Object obj) {
-		return fake._equals(obj);
+		if (!(obj instanceof File)) {
+			return false;
+		}
+		String path = fake.getPath();
+		if (!caseSensitive) {
+			return path.equalsIgnoreCase(((File) obj).getPath());
+		}
+		return path.equals(((File) obj).getPath());	
 	}
 	
 	@Override
 	public int hashCode(FakeFile fake) {
-		return 1234321 ^ fake.getPath().hashCode();
+		String path = fake.getPath();
+		if (caseSensitive) {
+			return path.hashCode() ^ 1234321;
+		}
+		return path.toLowerCase().hashCode() ^ 1234321;
 	}
 	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	@Override
 	public URI toURI(FakeFile fake) {
+		String name = fake.getAbsolutePath();
 		try {
-			return new URI("file", null, fake.getAbsolutePath(), null);
-		} catch (URISyntaxException x) {
-			throw new RuntimeException();
+			if (!name.startsWith("/")) {
+				// start with sep.
+				return new URI("file", null, new StringBuilder(
+						name.length() + 1).append('/').append(name).toString(),
+						null, null);
+			} else if (name.startsWith("//")) {
+				return new URI("file", "", name, null); // UNC path
+			}
+			return new URI("file", null, name, null, null);
+		} catch (URISyntaxException e) {
+			// this should never happen
+			return null;
 		}	
 	}
 	
+	/**
+	 * http://www.docjar.com/html/api/java/io/File.java.html
+	 */
 	@Override
 	public URL toURL(FakeFile fake) throws MalformedURLException {
-		return new URL("file", "", fake.getAbsolutePath());
+		String name = fake.getAbsolutePath();
+		if (!name.startsWith("/")) {
+			// start with sep.
+			return new URL(
+					"file", "", -1, new StringBuilder(name.length() + 1) 
+					.append('/').append(name).toString(), null);
+		} else if (name.startsWith("//")) {
+			return new URL("file:" + name); // UNC path
+		}
+		return new URL("file", "", -1, name, null);	
 	}
+	
 	
 }

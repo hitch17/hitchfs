@@ -131,5 +131,15 @@ public interface FakeFileOperations {
 	public abstract OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException;
 
 	public abstract void touch(FakeFile fake);
+
+	public abstract char getSeparatorChar();
+
+	public abstract String getSeparator();
+	
+	public abstract String getPathSeparator();
+
+	public abstract char getPathSeparatorChar();
+	
+	public abstract boolean isCaseSensitive();
 	
 }

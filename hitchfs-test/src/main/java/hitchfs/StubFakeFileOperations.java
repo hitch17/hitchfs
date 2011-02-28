@@ -228,4 +228,24 @@ public class StubFakeFileOperations implements FakeFileOperations {
 		throw new UnsupportedOperationException();
 	}
 
+	public char getSeparatorChar() {
+		return File.separatorChar;
+	}
+
+	public String getSeparator() {
+		return File.separator;
+	}
+	
+	public String getPathSeparator() {
+		return File.pathSeparator;
+	}
+
+	public char getPathSeparatorChar() {
+		return File.pathSeparatorChar;
+	}
+	
+	public boolean isCaseSensitive() {
+		return (getSeparatorChar() == '/');
+	}
+	
 }
