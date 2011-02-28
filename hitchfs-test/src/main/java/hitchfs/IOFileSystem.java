@@ -112,6 +112,7 @@ public class IOFileSystem extends MemoryFileSystem {
 			} else {
 				this.output = new ByteArrayOutputStream();
 			}
+			this.content.data = new byte[0];
 		}
 
 		@Override

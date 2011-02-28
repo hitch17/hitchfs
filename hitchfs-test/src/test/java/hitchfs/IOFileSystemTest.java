@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import hitchfs.FakeFile;
 import hitchfs.IOFileSystem;
+import hitchfs.IOFileSystem.Content;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -94,6 +95,7 @@ public class IOFileSystemTest {
 		fs.writer("file");
 	}
 	
+	@Test
 	public void testClear() throws IOException {
 		IOFileSystem fs = new IOFileSystem();
 		FakeFile f = fs.file("file");
@@ -108,6 +110,22 @@ public class IOFileSystemTest {
 		Reader r = fs.reader(f);
 		assertEquals(-1, r.read());
 		r.close();
+	}
+	
+	@Test
+	public void testAppend() throws IOException {
+		IOFileSystem fs = new IOFileSystem();
+		FakeFile f = fs.file("file");
+		Writer w = fs.writer(f);
+		w.write("hello, ");
+		w.close();
+
+		w = fs.writer(f, true);
+		w.write("world.");
+		w.close();
+
+		Content c = f.getProperty(Content.class);
+		assertEquals("hello, world.", new String(c.data));
 	}
 	
 }

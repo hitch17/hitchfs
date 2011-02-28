@@ -237,7 +237,7 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 	
 	public Writer writer(File file) throws IOException {
-		return new OutputStreamWriter(output(file));
+		return writer(file, false);
 	}
 	
 	public Writer writer(String filename) throws IOException {
@@ -245,11 +245,11 @@ public class StubFileSystem extends StubFakeFileOperations implements FileSystem
 	}
 	
 	public Writer writer(File file, boolean append) throws IOException {
-		return writer(file);
+		return new OutputStreamWriter(output(file, append));
 	}
 	
 	public Writer writer(String filename, boolean append) throws IOException {
-		return writer(file(filename));
+		return writer(file(filename), append);
 	}
 	
 	public InputStream input(FileDescriptor fdObj) {
