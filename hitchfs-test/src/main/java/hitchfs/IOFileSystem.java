@@ -56,7 +56,7 @@ public class IOFileSystem extends MemoryFileSystem {
 		if (!fake.exists()) {
 			return 0;
 		} else {
-			return getContent(fake).data.length;
+			return getContent(fake).getLength();
 		}
 	}
 	
@@ -77,28 +77,90 @@ public class IOFileSystem extends MemoryFileSystem {
 		return c;
 	}
 
+	static interface FileContent {
+		InputStream getInputStream(Content content, FakeFile fake) throws IOException;
+		OutputStream getOutputStream(Content content, FakeFile fake, boolean append) throws IOException;
+		long getLength();
+		void close();
+		void clear();
+	}
+	
+	static class ByteArrayContent implements FileContent {
+		byte[] data = new byte[0];
+		ByteArrayOutputStream output = null;
+		@Override
+		public void clear() {
+			this.data = new byte[0];
+			this.output = null;
+		}
+		@Override
+		public InputStream getInputStream(Content content, FakeFile fake) {
+			return new ByteArrayInputStream(data);
+		}
+		@Override
+		public OutputStream getOutputStream(Content content, FakeFile fake, boolean append) throws IOException {
+			if (append) {
+				this.output = new ByteArrayOutputStream(this.data.length);
+				this.output.write(this.data);
+			} else {
+				this.output = new ByteArrayOutputStream();
+			}
+			this.data = new byte[0];
+			return output;
+		}
+		@Override
+		public void close() {
+			if (this.output != null) {
+				data = this.output.toByteArray();
+			}
+		}
+
+		@Override
+		public long getLength() {
+			return data.length;
+		}
+	}
+	
 	static class Content implements FileProp {
 
 		AtomicReference<FileState> state = new AtomicReference<FileState>(NONE);
-		byte[] data = new byte[0];
+		FileContent content = new ByteArrayContent();
 		
 		public OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException {
-			if (!state.compareAndSet(NONE, WRITING)) {
-				throw new IOException("File is already open.");
-			}
-			return new ContentOutputStream(fake, this, append);
+			return new ContentOutputStream(this, fake, content.getOutputStream(this, fake, append));
+		}
+
+		public long getLength() {
+			return content.getLength();
 		}
 
 		public InputStream getInputStream(FakeFile fake) throws IOException {
-			if (!state.compareAndSet(NONE, READING)) {
-				throw new IOException("File is already open.");
-			}
-			return new ContentInputStream(this);
+			return new ContentInputStream(this, fake, content.getInputStream(this, fake));
 		}
 		
 		public void clear() {
-			this.data = new byte[0];
-			state.set(FileState.NONE);
+			content.clear();
+			state.set(NONE);
+		}
+
+		public void open(FakeFile fake, FileState newState) throws IOException {
+			if (!state.compareAndSet(NONE, newState)) {
+				throw new IOException(String.format("File is already open for %s.", state.get()));
+			}
+		}
+		
+		public void close(FakeFile fake, FileState expectedState, boolean updateLastModified) throws IOException {
+			content.close();
+			if (!state.compareAndSet(expectedState, NONE)) {
+				throw new IOException(String.format("File was changed from %s state before close.", state));
+			}
+			if (updateLastModified) {
+				fake.touch();
+			}
+		}
+
+		public FileContent getContent() {
+			return this.content;
 		}
 		
 	}
@@ -111,18 +173,13 @@ public class IOFileSystem extends MemoryFileSystem {
 
 		private Content content;
 		private FakeFile fake;
-		private ByteArrayOutputStream output;
+		private OutputStream output;
 
-		public ContentOutputStream(FakeFile fake, Content content, boolean append) throws IOException {
-			this.fake = fake;
+		public ContentOutputStream(Content content, FakeFile fake, OutputStream output) throws IOException {
 			this.content = content;
-			if (append) {
-				this.output = new ByteArrayOutputStream(content.data.length);
-				this.output.write(content.data);
-			} else {
-				this.output = new ByteArrayOutputStream();
-			}
-			this.content.data = new byte[0];
+			this.output = output;
+			this.fake = fake;
+			content.open(fake, WRITING);
 		}
 
 		@Override
@@ -132,11 +189,7 @@ public class IOFileSystem extends MemoryFileSystem {
 		
 		@Override
 		public void close() throws IOException {
-			content.data = output.toByteArray();
-			if (!content.state.compareAndSet(WRITING, NONE)) {
-				throw new IOException("File was changed from writing state before close.");
-			}
-			fake.touch();
+			content.close(fake, WRITING, true);
 		}
 		
 	}
@@ -144,11 +197,14 @@ public class IOFileSystem extends MemoryFileSystem {
 	static class ContentInputStream extends InputStream {
 
 		private Content content;
-		private ByteArrayInputStream input;
+		private InputStream input;
+		private FakeFile fake;
 
-		public ContentInputStream(Content content) {
+		public ContentInputStream(Content content, FakeFile fake, InputStream input) throws IOException {
 			this.content = content;
-			this.input = new ByteArrayInputStream(content.data);
+			this.fake = fake;
+			this.input = input;
+			content.open(fake, READING);
 		}
 
 		@Override
@@ -158,9 +214,7 @@ public class IOFileSystem extends MemoryFileSystem {
 		
 		@Override
 		public void close() throws IOException {
-			if (!content.state.compareAndSet(READING, NONE)) {
-				throw new IOException("File was changed from reading state before close.");
-			}
+			content.close(fake, READING, false);
 		}
 		
 	}

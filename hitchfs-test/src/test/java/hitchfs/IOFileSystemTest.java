@@ -3,8 +3,7 @@ package hitchfs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import hitchfs.FakeFile;
-import hitchfs.IOFileSystem;
+import hitchfs.IOFileSystem.ByteArrayContent;
 import hitchfs.IOFileSystem.Content;
 
 import java.io.FileNotFoundException;
@@ -134,7 +133,7 @@ public class IOFileSystemTest {
 		w.write("world.");
 		w.close();
 
-		Content c = f.getProperty(Content.class);
+		ByteArrayContent c = (ByteArrayContent) f.getProperty(Content.class).getContent();
 		assertEquals("hello, world.", new String(c.data));
 	}
 	
