@@ -4,12 +4,11 @@ import static hitchfs.IOFileSystem.FileState.NONE;
 import static hitchfs.IOFileSystem.FileState.READING;
 import static hitchfs.IOFileSystem.FileState.WRITING;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /*
@@ -80,58 +79,45 @@ public class IOFileSystem extends MemoryFileSystem {
 	static interface FileContent {
 		InputStream getInputStream(Content content, FakeFile fake) throws IOException;
 		OutputStream getOutputStream(Content content, FakeFile fake, boolean append) throws IOException;
-		long getLength();
 		void close();
 		void clear();
-	}
-	
-	static class ByteArrayContent implements FileContent {
-		byte[] data = new byte[0];
-		ByteArrayOutputStream output = null;
-		@Override
-		public void clear() {
-			this.data = new byte[0];
-			this.output = null;
-		}
-		@Override
-		public InputStream getInputStream(Content content, FakeFile fake) {
-			return new ByteArrayInputStream(data);
-		}
-		@Override
-		public OutputStream getOutputStream(Content content, FakeFile fake, boolean append) throws IOException {
-			if (append) {
-				this.output = new ByteArrayOutputStream(this.data.length);
-				this.output.write(this.data);
-			} else {
-				this.output = new ByteArrayOutputStream();
-			}
-			this.data = new byte[0];
-			return output;
-		}
-		@Override
-		public void close() {
-			if (this.output != null) {
-				data = this.output.toByteArray();
-			}
-		}
-
-		@Override
-		public long getLength() {
-			return data.length;
-		}
 	}
 	
 	static class Content implements FileProp {
 
 		AtomicReference<FileState> state = new AtomicReference<FileState>(NONE);
-		FileContent content = new ByteArrayContent();
+		FileContent content = new Md5Content();
+		AtomicLong length = new AtomicLong(0);
 		
+		public Content() {}
+
+		public Content(FileContent content) {
+			this.content = content;
+		}
+
 		public OutputStream getOutputStream(FakeFile fake, boolean append) throws IOException {
-			return new ContentOutputStream(this, fake, content.getOutputStream(this, fake, append));
+			ContentOutputStream out = new ContentOutputStream(
+					this, fake, content.getOutputStream(this, fake, append));
+			if (!append) {
+				length.set(0);
+			}
+			return out;
 		}
 
 		public long getLength() {
-			return content.getLength();
+			if (state.get() == NONE) {
+				return length.get();
+			} else {
+				return 0;
+			}
+		}
+		
+		public void setLength(long length) {
+			this.length.set(length);
+		}
+		
+		public long incLength() {
+			return this.length.incrementAndGet();
 		}
 
 		public InputStream getInputStream(FakeFile fake) throws IOException {
@@ -140,6 +126,7 @@ public class IOFileSystem extends MemoryFileSystem {
 		
 		public void clear() {
 			content.clear();
+			length.set(0);
 			state.set(NONE);
 		}
 
@@ -185,6 +172,7 @@ public class IOFileSystem extends MemoryFileSystem {
 		@Override
 		public void write(int b) throws IOException {
 			output.write(b);
+			content.incLength();
 		}
 		
 		@Override

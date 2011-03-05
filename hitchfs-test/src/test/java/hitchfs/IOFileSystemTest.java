@@ -1,9 +1,9 @@
 package hitchfs;
 
+import static hitchfs.ByteArrayContent.byteArrayContent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import hitchfs.IOFileSystem.ByteArrayContent;
 import hitchfs.IOFileSystem.Content;
 
 import java.io.FileNotFoundException;
@@ -36,12 +36,14 @@ public class IOFileSystemTest {
 			}
 		};
 		String pathname = "file";
+		fs.file(pathname)
+			.withProperty(byteArrayContent());
 		Writer w = fs.writer(pathname);
 		currentTime.set(12345);
 		String msg = "hello, world.";
 		w.write(msg);
 		w.close();
-		
+		 
 		FakeFile f = fs.file(pathname);
 		assertTrue(f.exists());
 		assertTrue(f.isFile());
@@ -124,7 +126,8 @@ public class IOFileSystemTest {
 	@Test
 	public void testAppend() throws IOException {
 		IOFileSystem fs = new IOFileSystem();
-		FakeFile f = fs.file("file");
+		FakeFile f = fs.file("file")
+			.withProperty(byteArrayContent());
 		Writer w = fs.writer(f);
 		w.write("hello, ");
 		w.close();
