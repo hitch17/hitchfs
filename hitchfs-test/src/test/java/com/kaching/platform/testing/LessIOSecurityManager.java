@@ -72,7 +72,7 @@ public class LessIOSecurityManager extends SecurityManager {
 
   protected static final String JAVA_HOME = System.getProperty("java.home");
   protected static final String PATH_SEPARATOR = System.getProperty("path.separator");
-  protected static final List<String> CP_PARTS = ImmutableList.of(System.getProperty("java.class.path").split(PATH_SEPARATOR));
+  protected static final List<String> CP_PARTS = ImmutableList.copyOf(System.getProperty("java.class.path").split(PATH_SEPARATOR));
   private static final Set<Class<?>> whitelistedClasses = ImmutableSet.<Class<?>>of(
                                                             java.lang.ClassLoader.class,
                                                             java.net.URLClassLoader.class);
