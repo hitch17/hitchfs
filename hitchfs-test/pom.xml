@@ -4,14 +4,14 @@
 	<groupId>gs.hitchin.hitchfs</groupId>
 	<artifactId>hitchfs-test</artifactId>
 	<name>HitchFS testing package</name>
-	<version>0.0.2</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<description>
         Filesystem abstraction layer designed for testing. Testing component, use with test scope.
     </description>
 	<url>http://github.com/hitch17/hitchfs</url>
 	<scm>
-		<connection>scm:git:git://github.com/hitch17/hitchfs.git</connection>
+		<connection>scm:git:git@github.com:hitch17/hitchfs.git</connection>
 		<developerConnection>scm:git:git@github.com:hitch17/hitchfs.git</developerConnection>
 		<url>http://github.com/hitch17/hitchfs/tree/master</url>
 	</scm>

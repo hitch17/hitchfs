@@ -4,7 +4,7 @@
     <groupId>gs.hitchin.hitchfs</groupId>
     <artifactId>hitchfs</artifactId>
     <name>HitchFS</name>
-    <version>0.0.2</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>
       Filesystem abstraction layer designed for testing.
@@ -17,7 +17,7 @@
 		</license>
 	</licenses>
     <scm>
-        <connection>scm:git:git://github.com/hitch17/hitchfs.git</connection>
+        <connection>scm:git:git@github.com:hitch17/hitchfs.git</connection>
         <developerConnection>scm:git:git@github.com:hitch17/hitchfs.git</developerConnection>
         <url>http://github.com/hitch17/hitchfs/tree/master</url>
     </scm>
