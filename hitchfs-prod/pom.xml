@@ -17,6 +17,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		<url>http://github.com/hitch17/hitchfs/tree/master</url>
 	</scm>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
