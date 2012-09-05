@@ -1,7 +1,7 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
-import hitchfs.IOFileSystem.Content;
-import hitchfs.IOFileSystem.FileContent;
+import gs.hitchin.hitchfs.IOFileSystem.Content;
+import gs.hitchin.hitchfs.IOFileSystem.FileContent;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

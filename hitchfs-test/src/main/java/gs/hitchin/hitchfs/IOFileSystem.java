@@ -1,8 +1,8 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
-import static hitchfs.IOFileSystem.FileState.NONE;
-import static hitchfs.IOFileSystem.FileState.READING;
-import static hitchfs.IOFileSystem.FileState.WRITING;
+import static gs.hitchin.hitchfs.IOFileSystem.FileState.NONE;
+import static gs.hitchin.hitchfs.IOFileSystem.FileState.READING;
+import static gs.hitchin.hitchfs.IOFileSystem.FileState.WRITING;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,7 +1,9 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import gs.hitchin.hitchfs.BasicFileSystem;
 
 import java.io.File;
 import java.io.IOException;

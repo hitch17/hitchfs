@@ -1,4 +1,4 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import java.io.File;
 import java.io.IOException;

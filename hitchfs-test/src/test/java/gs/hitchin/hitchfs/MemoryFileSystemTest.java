@@ -1,10 +1,13 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import hitchfs.MemoryFileSystem.Metadata;
+import gs.hitchin.hitchfs.FakeFile;
+import gs.hitchin.hitchfs.FileProp;
+import gs.hitchin.hitchfs.MemoryFileSystem;
+import gs.hitchin.hitchfs.MemoryFileSystem.Metadata;
 
 import java.io.File;
 import java.io.FileFilter;

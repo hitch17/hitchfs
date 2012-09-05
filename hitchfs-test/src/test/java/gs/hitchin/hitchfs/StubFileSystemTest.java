@@ -1,9 +1,14 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
-import static hitchfs.MessageDigestOutputStream.md5;
+import static gs.hitchin.hitchfs.MessageDigestOutputStream.md5;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import gs.hitchin.hitchfs.FakeFile;
+import gs.hitchin.hitchfs.FileProp;
+import gs.hitchin.hitchfs.MessageDigestOutputStream;
+import gs.hitchin.hitchfs.StubFileSystem;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

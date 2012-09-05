@@ -1,7 +1,9 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 
 import static org.junit.Assert.assertEquals;
+
+import gs.hitchin.hitchfs.MessageDigestOutputStream;
 
 import java.io.ByteArrayOutputStream;
 

@@ -1,10 +1,13 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
-import static hitchfs.ByteArrayContent.byteArrayContent;
+import static gs.hitchin.hitchfs.ByteArrayContent.byteArrayContent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import hitchfs.IOFileSystem.Content;
+import gs.hitchin.hitchfs.ByteArrayContent;
+import gs.hitchin.hitchfs.FakeFile;
+import gs.hitchin.hitchfs.IOFileSystem;
+import gs.hitchin.hitchfs.IOFileSystem.Content;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

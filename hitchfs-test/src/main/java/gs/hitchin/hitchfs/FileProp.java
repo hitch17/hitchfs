@@ -1,4 +1,4 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 /*
  * Licensed under the Apache License,

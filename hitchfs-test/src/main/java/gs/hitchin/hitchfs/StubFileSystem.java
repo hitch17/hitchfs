@@ -1,9 +1,11 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static com.google.common.base.Joiner.on;
 import static com.google.common.collect.Iterables.skip;
 import static com.google.common.collect.Lists.newLinkedList;
 import static java.util.Arrays.asList;
+
+import gs.hitchin.hitchfs.FileSystem;
 
 import java.io.File;
 import java.io.FileDescriptor;

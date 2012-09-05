@@ -1,4 +1,4 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static java.lang.String.format;
 import static java.security.MessageDigest.getInstance;

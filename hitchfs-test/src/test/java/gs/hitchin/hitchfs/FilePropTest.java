@@ -1,9 +1,13 @@
-package hitchfs;
+package gs.hitchin.hitchfs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import hitchfs.PropStore.PropVisitor;
+import gs.hitchin.hitchfs.FakeFile;
+import gs.hitchin.hitchfs.FileProp;
+import gs.hitchin.hitchfs.PropStore;
+import gs.hitchin.hitchfs.StubFileSystem;
+import gs.hitchin.hitchfs.PropStore.PropVisitor;
 
 import org.junit.Test;
 

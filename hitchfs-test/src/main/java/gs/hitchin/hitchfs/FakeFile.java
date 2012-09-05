@@ -1,5 +1,5 @@
-package hitchfs;
-import hitchfs.PropStore.PropVisitor;
+package gs.hitchin.hitchfs;
+import gs.hitchin.hitchfs.PropStore.PropVisitor;
 
 import java.io.File;
 import java.io.FileFilter;
