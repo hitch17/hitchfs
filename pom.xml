@@ -4,7 +4,7 @@
     <groupId>gs.hitchin.hitchfs</groupId>
     <artifactId>hitchfs</artifactId>
     <name>HitchFS</name>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>
       Filesystem abstraction layer designed for testing.
