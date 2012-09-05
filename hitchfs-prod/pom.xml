@@ -4,7 +4,7 @@
 	<groupId>gs.hitchin.hitchfs</groupId>
 	<artifactId>hitchfs-prod</artifactId>
 	<name>hitchfs-prod</name>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 	<description>
         Filesystem abstraction layer designed for testing. Production component.
