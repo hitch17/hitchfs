@@ -12,7 +12,7 @@
 	<url>http://github.com/hitch17/hitchfs</url>
 	<scm>
 		<connection>scm:git:git://github.com/hitch17/hitchfs.git</connection>
-		<developerConnection>scm:git:git@github.com/hitch17/hitchfs.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:hitch17/hitchfs.git</developerConnection>
 		<url>http://github.com/hitch17/hitchfs/tree/master</url>
 	</scm>
 
