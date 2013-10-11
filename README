@@ -95,6 +95,4 @@ and StringProp is just:
 Then, when you're in your real application, just use DefaultFileSystem to get
 the real Java implementations of File, File Streams, and File Reader/Writers.
     
-HitchFS is still in early stages, and I have some ideas for where to take it next, but I'd 
-love to hear feedback and other ideas.  Thanks!  -John
 
